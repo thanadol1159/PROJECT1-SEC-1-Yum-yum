@@ -1,18 +1,47 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref } from 'vue'
 
+//variable
+let deck = [];
+// let dealerPoint = ref('0')
+// let playerPoint = ref('0')
+
+//Call Functions
+buildDeck();
+shuffleDeck();
+// startGame();
+
+//Deck
+function buildDeck() {
+  let points = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+  let types = ["A", "C", "N", "T"];
+  for (const type of types) {
+    for (const point of points) {
+      deck.push(point + "-" + type); //A-C -> K-C, A-D -> K-D
+    }
+  }
+  console.log(deck);
+}
+function shuffleDeck() {
+  for (let i = 0; i < deck.length; i++) {
+    let j = Math.floor(Math.random() * deck.length); // (0-1) * 52 => (0-51.9999)
+    let temp = deck[i];
+    deck[i] = deck[j];
+    deck[j] = temp;
+  }
+  console.log(deck);
+}
 </script>
 
 <template>
   <div class="w-full">
     <!-- Dealer -->
     <div class="w-full py-6">
-      <h1 class="flex justify-center font-bold text-xl">Dealer: 17</h1>
-      <div class="flex justify-center space-x-5 pt-4">
-        <img class="w-36 " src="./assets/img/All-card-final/8-A.png">
-        <img class="w-36 " src="./assets/img/All-card-final/9-C.png">
+      <div class="pt-4 flex justify-center space-x-5">
+        <img class="w-36 " src="./assets/img/All-card-final/10-A.png">
+        <img class="w-36 " src="./assets/img/All-card-final/7-C.png">
       </div>
+      <h1 class="pt-4 flex justify-center font-bold text-xl">Dealer: 17</h1>
     </div>
 
     <!-- Button -->
