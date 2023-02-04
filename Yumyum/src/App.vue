@@ -3,8 +3,11 @@ import { ref } from 'vue'
 
 //variable
 let deck = [];
-// let dealerPoint = ref('0')
-// let playerPoint = ref('0')
+let dealerPoint = ref('17')
+let playerPoint = ref('20')
+
+// let hide = ref('./assets/img/All-card-final/backcard/back_card.svg')
+
 
 //Call Functions
 buildDeck();
@@ -31,17 +34,23 @@ function shuffleDeck() {
   }
   console.log(deck);
 }
+
+// function startGame() {
+//   let cardDealer = deck.shift(); //first Card
+//   // console.log(cardDealer);
+//   // console.log(deck);
+// }
 </script>
 
 <template>
   <div class="w-full">
     <!-- Dealer -->
     <div class="w-full py-6">
-      <div class="pt-4 flex justify-center space-x-5">
-        <img class="w-36 " src="./assets/img/All-card-final/10-A.png">
-        <img class="w-36 " src="./assets/img/All-card-final/7-C.png">
+      <div class="pt-4 flex justify-center space-x-8">
+        <img class="w-32" src='./assets/img/All-card-final/backcard/back_card.svg' ref="hiddenCard">
+        <img class="w-32" src='./assets/img/All-card-final/7-C.png'>
       </div>
-      <h1 class="pt-4 flex justify-center font-bold text-xl">Dealer: 17</h1>
+      <h1 class="pt-4 flex justify-center font-bold text-xl">Dealer: {{ dealerPoint }}</h1>
     </div>
 
     <!-- Button -->
@@ -56,10 +65,10 @@ function shuffleDeck() {
 
     <!-- Player -->
     <div class="w-full pt-3">
-      <h1 class="flex justify-center font-bold text-xl">Player: 21</h1>
+      <h1 class="flex justify-center font-bold text-xl">Player: {{ playerPoint }}</h1>
       <div class="flex justify-center space-x-5 pt-4">
-        <img class="w-36 " src="./assets/img/All-card-final/J-T.png">
-        <img class="w-36 " src="./assets/img/All-card-final/A-C.png">
+        <img class="w-32 " src="./assets/img/All-card-final/J-T.png">
+        <img class="w-32 " src="./assets/img/All-card-final/A-C.png">
       </div>
     </div>
   </div>
