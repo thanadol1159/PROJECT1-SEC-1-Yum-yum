@@ -20,7 +20,7 @@ function buildDeck() {
   let types = ["A", "C", "N", "T"];
   for (const type of types) {
     for (const point of points) {
-      deck.push(point + "-" + type); //A-C -> K-C, A-D -> K-D
+      deck.push(point + "-" + type);  // A-A , 2-A , ... , K-T
     }
   }
   console.log(deck);
