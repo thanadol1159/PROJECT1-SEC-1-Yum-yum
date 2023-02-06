@@ -3,16 +3,13 @@ import { ref } from 'vue'
 
 //variable
 let bg_first = ref(true)
-let bg_last = ref(false)
 const bg_first_func = () => {
   bg_first.value = false
-  bg_last.value = true
-  how_to_play.value = true
 }
 
 let how_to_play = ref(false)
 const how_to_play_func = () => {
-  how_to_play.value = !how_to_play
+  how_to_play.value = !how_to_play.value
 }
 
 //variable game
@@ -58,40 +55,23 @@ function shuffleDeck() {
 
 <template>
   <div class="w-screen h-screen">
+    <!-- BG Fix -->
     <div class="bg-bottom bg-cover bg-no-repeat w-full h-full bg-[url('./src/assets/img/bg-fix-fix.png')]">
-      
-      
-
+      <!-- BG Blur -->
       <div class="absolute w-screen h-screen bg-bottom bg-cover bg-no-repeat bg-[url('../src/assets/img/bg-blur.jpg')]"
         @click="bg_first_func" v-show="bg_first">
-        <h1 class="w-full flex justify-center mt-9 font-sans font-extrabold text-9xl tracking-wider text-white">
+        <h1 class="w-full flex justify-center mt-9 
+        font-sans font-extrabold text-9xl tracking-wider text-white">
           BLACKJACK
         </h1>
-        <h4 class="w-full font-sans font-semibold text-3xl flex justify-center text-end mt-64 text-gray-300">click to
-          start
+        <h4 class="w-full font-sans font-semibold text-3xl flex justify-center 
+        text-end mt-64 text-gray-300">
+          click to start
         </h4>
       </div>
 
-
-      
-      
-      <!-- Btn How to Play -->
-      <!-- <div class="w-full absolute">
-        <button class="px-3 py-1 mt-14 mr-28 float-right
-         bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 text-white 
-               font-bold text-lg text-center rounded-md">
-          How to Play
-        </button>
-      </div> -->
-
-      <!-- Text How to play -->
-      <!-- <div class="rule absolute w-2/5 h-4/5 bg-white opacity-90">
-        <p class="pt-6 text-center text-3xl">อธิบายการเล่น</p>
-      </div> -->
-
-
       <!-- Score -->
-      <div class="flex justify-center items-center" v-show="bg_last">
+      <div class="flex justify-center items-center" v-show="!bg_first">
         <div class="relative flex justify-center">
           <div class="totalScore z-10 relative flex items-center justify-center "><span class="pt-10 "> Round: </span>
           </div>
@@ -105,6 +85,21 @@ function shuffleDeck() {
           </div>
         </div>
       </div>
+
+      <!-- Btn How to Play -->
+      <div class="w-full absolute" v-show="!bg_first">
+        <button class="px-3 py-1 mr-12 float-right
+         bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 text-black 
+               font-bold text-lg text-center rounded-lg" @click="how_to_play_func">
+          How to Play
+        </button>
+      </div>
+
+      <!-- Text How to play -->
+      <div class="rule absolute w-2/5 h-4/5 bg-white opacity-90" v-show="how_to_play">
+        <p class="pt-6 text-center text-3xl">อธิบายการเล่น</p>
+      </div>
+
       <!-- Dealer -->
       <div class="w-full pt-6">
         <div class="flex justify-center space-x-8">
@@ -139,7 +134,7 @@ function shuffleDeck() {
 <style scoped>
 .rule {
   left: 30%;
-  top: 10%;
+  top: 14%;
 }
 
 .totalScore {
