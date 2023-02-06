@@ -2,15 +2,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  background-image: url(../assets/img/bg-fix-fix.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 100%;
-  background-position: center;
-}
-* {
-  margin: 0;
-  padding: 0;
-}
