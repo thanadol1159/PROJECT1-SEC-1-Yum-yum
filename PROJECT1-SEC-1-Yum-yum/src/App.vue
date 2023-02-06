@@ -2,6 +2,12 @@
 import { ref } from 'vue'
 
 //variable
+let bg_first = ref(true)
+const bg_first_func = () => {
+  bg_first.value = false;
+} 
+
+//variable game
 let deck = [];
 let dealerPoint = ref('17')
 let playerPoint = ref('20')
@@ -43,12 +49,12 @@ function shuffleDeck() {
 </script>
 
 <template>
-  <div class="w-full py-12">
+  <div class="w-full">
     <!-- Dealer -->
     <div class="w-full">
-      <div class="flex justify-center space-x-8">
-        <img class="w-36" src='./assets/img/All-card-final/backcard/back_card.svg' ref="hiddenCard">
-        <img class="w-36" src='./assets/img/All-card-final/7-C.png'>
+      <div class="flex justify-center space-x-8 pt-4">
+        <img class="w-32" src='./assets/img/All-card-final/backcard/back_card.svg' ref="hiddenCard">
+        <img class="w-32" src='./assets/img/All-card-final/7-C.png'>
       </div>
       <h1 class="pt-4 flex justify-center text-white font-bold text-xl">Dealer: {{ dealerPoint }}</h1>
     </div>
@@ -67,8 +73,8 @@ function shuffleDeck() {
     <div class="w-full">
       <h1 class="flex justify-center text-white font-bold text-xl">Player: {{ playerPoint }}</h1>
       <div class="flex justify-center space-x-5 pt-4">
-        <img class="w-36 " src="./assets/img/All-card-final/J-T.png">
-        <img class="w-36 " src="./assets/img/All-card-final/A-C.png">
+        <img class="w-32" src="./assets/img/All-card-final/J-T.png">
+        <img class="w-32" src="./assets/img/All-card-final/A-C.png">
       </div>
     </div>
   </div>
