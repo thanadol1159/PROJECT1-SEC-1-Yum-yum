@@ -55,6 +55,19 @@ function shuffleDeck() {
 </script>
 
 <template>
+<div class="bg-bottom h-screen bg-cover bg-no-repeat bg-[url('./src/assets/bg.png')]">
+    <div class="flex justify-center items-center">
+      <div class="relative flex justify-center">
+        <div class="box5 z-10 relative flex items-center justify-center bx5"><span class="pt-10 "> Round: </span></div>
+        <div class="box7 absolute top-0 m-auto z-30 bx7"><span class="flex justify-center items-center w-60 h-12">1 - 0</span></div>
+        <div class="box6 absolute m-auto z-20 flex items-center top-0 bx6  justify-around">
+          <div class="flex ">PLAYER:</div>
+          <div class="flex">2</div>
+          <div class="flex">DEALER:</div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="absolute w-screen h-screen bg-bottom bg-cover bg-no-repeat bg-[url('../src/assets/img/bg-blur.jpg')]"
     @click="bg_first_func" v-show="bg_first">
     <h1 class="w-full flex justify-center mt-9 font-sans font-extrabold text-9xl tracking-wider text-white">BLACKJACK
@@ -115,4 +128,28 @@ function shuffleDeck() {
   left: 30%;
   top: 10%;
 }
+  .box5{
+    width: 220px;
+    height: 75px;
+  }
+  .box6{
+    width: 600px;
+    height: 40px;
+  }
+
+  .bx5{
+    background: linear-gradient(120deg,#00e8fd,#027fbe);
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+  }
+  .bx6{
+    background: linear-gradient(120deg,#19f0b0,#0fee98);
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+  }
+  .bx7{
+    background: linear-gradient(120deg,#015b40,#023f28);
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+  }
 </style>
