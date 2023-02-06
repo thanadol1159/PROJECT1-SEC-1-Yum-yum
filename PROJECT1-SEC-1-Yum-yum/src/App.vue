@@ -55,7 +55,7 @@ function shuffleDeck() {
 </script>
 
 <template>
-<div class="bg-bottom h-screen bg-cover bg-no-repeat bg-[url('./src/assets/bg.png')]">
+
     <div class="flex justify-center items-center">
       <div class="relative flex justify-center">
         <div class="box5 z-10 relative flex items-center justify-center bx5"><span class="pt-10 "> Round: </span></div>
@@ -67,7 +67,7 @@ function shuffleDeck() {
         </div>
       </div>
     </div>
-  </div>
+
   <div class="absolute w-screen h-screen bg-bottom bg-cover bg-no-repeat bg-[url('../src/assets/img/bg-blur.jpg')]"
     @click="bg_first_func" v-show="bg_first">
     <h1 class="w-full flex justify-center mt-9 font-sans font-extrabold text-9xl tracking-wider text-white">BLACKJACK
