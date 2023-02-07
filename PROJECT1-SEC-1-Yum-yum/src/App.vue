@@ -54,6 +54,16 @@ function shuffleDeck() {
 </script>
 
 <template>
+  <!-- home page click to start -->
+  <!-- <div class="absolute w-full h-full" id="backgroundStart" @click="clickToStart" v-show="start">
+    <h1 class="w-full flex justify-center mt-9 font-sans font-extrabold text-9xl tracking-wider text-white">BLACKJACK</h1>
+    <h4 class="w-full font-sans font-semibold text-3xl flex justify-center text-end mt-96 text-gray-300">click to start</h4>
+  </div> -->
+
+  <!-- rule before playing -->
+  <!-- <div @click="clickToStart" class="absolute w-full h-full bg-blue-400 z-30" v-show="color"></div> -->
+  <!-- <div @click="clickToStart" class="absolute bg-red-300 z-10 p-40" v-show="rule"></div> -->
+
   <div class="w-screen h-screen">
     <!-- BG Fix -->
     <div class="bg-bottom bg-cover bg-no-repeat w-full h-full bg-[url('./src/assets/img/bg-fix-fix.png')]">
