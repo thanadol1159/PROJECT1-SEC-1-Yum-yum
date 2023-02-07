@@ -17,8 +17,11 @@ let deck = [];
 let dealerPoint = ref('17')
 let playerPoint = ref('20')
 
-// let hide = ref('./assets/img/All-card-final/backcard/back_card.svg')
-
+//card
+let dealerCard01 = 'img/All-card-final/backcard/back_card.svg'
+let dealerCard02 = 'img/All-card-final/' + '9' + '-' + 'C' + '.png'
+let playerCard01 = 'img/All-card-final/' + '9' + '-' + 'T' + '.png'
+let playerCard02 = 'img/All-card-final/' + 'A' + '-' + 'N' + '.png'
 
 //Call Functions
 buildDeck();
@@ -56,9 +59,9 @@ function shuffleDeck() {
 <template>
   <div class="w-screen h-screen">
     <!-- BG Fix -->
-    <div class="bg-bottom bg-cover bg-no-repeat w-full h-full bg-[url('./src/assets/img/bg-fix-fix.png')]">
+    <div class="bg-bottom bg-cover bg-no-repeat w-full h-full bg-[url('img/bg-fix-fix.png')]">
       <!-- BG Blur -->
-      <div class="absolute w-screen h-screen bg-bottom bg-cover bg-no-repeat bg-[url('../src/assets/img/bg-blur.jpg')]"
+      <div class="absolute w-screen h-screen bg-bottom bg-cover bg-no-repeat bg-[url('img/bg-blur.jpg')]"
         @click="bg_first_func" v-show="bg_first">
         <h1 class="w-full flex justify-center mt-9 
         font-sans font-extrabold text-9xl tracking-wider text-white">
@@ -103,8 +106,8 @@ function shuffleDeck() {
       <!-- Dealer -->
       <div class="w-full pt-6">
         <div class="flex justify-center space-x-8">
-          <img class="w-24" src='./assets/img/All-card-final/backcard/back_card.svg' ref="hiddenCard">
-          <img class="w-24" src='./assets/img/All-card-final/7-C.png'>
+          <img class="w-32" :src="dealerCard01" ref="hiddenCard">
+          <img class="w-32" :src="dealerCard02">
         </div>
         <h1 class="flex justify-center text-white font-bold text-xl py-4">Dealer: {{ dealerPoint }}</h1>
       </div>
@@ -123,8 +126,8 @@ function shuffleDeck() {
       <div class="w-full">
         <h1 class="flex justify-center text-white font-bold text-xl py-4">Player: {{ playerPoint }}</h1>
         <div class="flex justify-center space-x-5">
-          <img class="w-24" src="./assets/img/All-card-final/J-T.png">
-          <img class="w-24" src="./assets/img/All-card-final/A-C.png">
+          <img class="w-32" :src="playerCard01">
+          <img class="w-32" :src="playerCard02">
         </div>
       </div>
     </div>
