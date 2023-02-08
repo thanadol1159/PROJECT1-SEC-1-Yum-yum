@@ -66,7 +66,8 @@ function shuffleDeck() {
         </h1>
         <h4 class="w-full font-sans font-semibold text-3xl flex justify-center 
         text-end mt-64 text-gray-300">
-          click to start
+        <span class="blink">click to start</span>
+          
         </h4>
       </div>
 
@@ -158,5 +159,17 @@ function shuffleDeck() {
   background: linear-gradient(120deg, #015b40, #023f28);
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
+}
+
+.blink{
+  animation: blink 2s infinite;
+}
+
+@keyframes blink{
+  0%{opacity: 0;}
+  25%{opacity: 1;}
+50%{opacity: 0;}
+75%{opacity: 1;}
+100%{opacity: 0;}
 }
 </style>
