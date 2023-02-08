@@ -34,7 +34,6 @@ function buildDeck() {
       deck.push(point + "-" + type);  // A-A , 2-A , ... , K-T
     }
   }
-  console.log(deck);
 }
 function shuffleDeck() {
   for (let i = 0; i < deck.length; i++) {
@@ -43,7 +42,6 @@ function shuffleDeck() {
     deck[i] = deck[j];
     deck[j] = temp;
   }
-  console.log(deck);
 }
 
 // function startGame() {
