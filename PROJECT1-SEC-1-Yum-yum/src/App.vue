@@ -2,31 +2,26 @@
 import { ref } from 'vue'
 
 //variable
-let bg_first = ref(true)
+let bg_first = ref(true);
 const bg_first_func = () => {
-  bg_first.value = false
-}
-
-let how_to_play = ref(false)
-const how_to_play_func = () => {
-  how_to_play.value = !how_to_play.value
+  bg_first.value = false;
 }
 
 //variable game
 let deck = [];
-let dealerPoint = ref('17')
-let playerPoint = ref('20')
+let dealerPoint = ref(0);
+let playerPoint = ref(0);
+let dealerArr = [];
+let playerArr = [];
+let showHit = ref(true)
 
-//card
-let dealerCard01 = 'img/All-card-final/backcard/back_card.svg'
-let dealerCard02 = 'img/All-card-final/' + '9' + '-' + 'C' + '.png'
-let playerCard01 = 'img/All-card-final/' + '9' + '-' + 'T' + '.png'
-let playerCard02 = 'img/All-card-final/' + 'A' + '-' + 'N' + '.png'
 
 //Call Functions
-buildDeck();
-shuffleDeck();
-// startGame();
+window.onload = function () {
+  buildDeck();
+  shuffleDeck();
+  startGame();
+}
 
 //Deck
 function buildDeck() {
@@ -49,11 +44,54 @@ function shuffleDeck() {
   console.log(deck);
 }
 
-// function startGame() {
-//   let cardDealer = deck.shift(); //first Card
-//   // console.log(cardDealer);
-//   // console.log(deck);
-// }
+function startGame() {
+  for (let i = 0; i < 2; i++) { // D > P > D > P
+    // D
+    let cardDealer = deck.shift(); // J-T
+    dealerArr.push(getPicture(cardDealer));
+    dealerPoint.value += getPoint(cardDealer);
+    // P
+    let cardPlayer = deck.shift();
+    playerArr.push(getPicture(cardPlayer));
+    playerPoint.value += getPoint(cardPlayer);
+  }
+  console.log(dealerPoint);
+  console.log(playerPoint);
+}
+
+function getPicture(card) {
+  let src = 'img/All-card-final/' + card + '.png';
+  return src;
+}
+
+function getPoint(card) {
+  let point = card.split("-")[0] // "6-T" -> ["6", "T"]
+  point == 'A' ? point = 11 : isNaN(point) ? point = 10 : point
+  return parseInt(point);
+}
+
+function hit() {
+  let cardPlayer = deck.shift();
+  playerArr.push(getPicture(cardPlayer));
+  playerPoint.value += getPoint(cardPlayer);
+  if (playerPoint.value > 21) {
+    playerPoint.value = 'BUSTED'
+    showHit.value = false
+  }
+  console.log(playerPoint);
+}
+
+function stay() {
+  if (dealerPoint.value > playerPoint.value) {
+    console.log('Lose');
+  }
+  if (dealerPoint.value < playerPoint.value) {
+    console.log('Lose');
+  }
+  if (dealerPoint.value == playerPoint.value) {
+    console.log('Tie');
+  }
+}
 </script>
 
 <template>
@@ -74,7 +112,7 @@ function shuffleDeck() {
       </div>
 
       <!-- Score -->
-      <div class="flex justify-center items-center" v-show="!bg_first">
+      <!-- <div class="flex justify-center items-center" v-show="!bg_first">
         <div class="relative flex justify-center">
           <div class="totalScore z-10 relative flex items-center justify-center "><span class="pt-10 "> Round: </span>
           </div>
@@ -87,47 +125,50 @@ function shuffleDeck() {
             <div class="flex">DEALER:</div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Btn How to Play -->
-      <div class="w-full absolute" v-show="!bg_first">
+      <!-- <div class="w-full absolute" v-show="!bg_first">
         <button class="px-3 py-1 mr-12 float-right
          bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 text-black 
                font-bold text-lg text-center rounded-lg" @click="how_to_play_func">
           How to Play
         </button>
-      </div>
+      </div> -->
 
       <!-- Text How to play -->
-      <div class="rule absolute w-2/5 h-4/5 bg-white opacity-90" v-show="how_to_play">
+      <!-- <div class="rule absolute w-2/5 h-4/5 bg-white opacity-90" v-show="how_to_play">
         <p class="pt-6 text-center text-3xl">อธิบายการเล่น</p>
-      </div>
+      </div> -->
 
       <!-- Dealer -->
       <div class="w-full pt-6">
-        <div class="flex justify-center space-x-8">
-          <img class="w-32" :src="dealerCard01" ref="hiddenCard">
-          <img class="w-32" :src="dealerCard02">
+        <div class="flex justify-center space-x-5" ref="imgCardDealer">
+          <img v-for="card in dealerArr" :src=card class="w-32">
         </div>
-        <h1 class="flex justify-center text-white font-bold text-xl py-4">Dealer: {{ dealerPoint }}</h1>
       </div>
+      <h1 class="flex justify-center text-white font-bold text-xl py-4">
+        Dealer: {{ dealerPoint }}
+      </h1>
 
       <!-- Button -->
       <div class="w-full flex justify-center space-x-8 h-8">
         <button class="px-6 bg-green-500 hover:bg-green-600 active:bg-green-800 text-white 
-               font-bold text-lg text-center rounded-lg"> HIT
+               font-bold text-lg text-center rounded-lg" @click="hit" v-show="showHit">
+          HIT
         </button>
         <button class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white 
-               font-bold text-lg text-center rounded-lg"> STAY
+               font-bold text-lg text-center rounded-lg" @click="stay"> STAY
         </button>
       </div>
 
       <!-- Player -->
       <div class="w-full">
-        <h1 class="flex justify-center text-white font-bold text-xl py-4">Player: {{ playerPoint }}</h1>
-        <div class="flex justify-center space-x-5">
-          <img class="w-32" :src="playerCard01">
-          <img class="w-32" :src="playerCard02">
+        <h1 class="flex justify-center text-white font-bold text-xl py-4">
+          Player: {{ playerPoint }}
+        </h1>
+        <div class="flex justify-center space-x-5" ref="imgCardPlayer">
+          <img v-for="card in playerArr" :src=card class="w-32">
         </div>
       </div>
     </div>
