@@ -77,6 +77,7 @@ function hit() {
   if (playerPoint.value > 21) {
     playerPoint.value = 'BUSTED';
     showHit.value = false;
+    alert('U R LOSSER')
     stay();
   }
   console.log(playerPoint);
@@ -154,11 +155,12 @@ function stay() {
 
       <!-- Button -->
       <div class="w-full flex justify-center space-x-8 h-8">
-        <button class="px-6 bg-green-500 hover:bg-green-600 active:bg-green-800 text-white 
-               font-bold text-lg text-center rounded-lg"  @click="hit" :class=" showHit ? 'bg-green-500' : 'bg-gray-500 btn-disabled cursor-not-allowed'">
+        <button type="button" class="px-6 bg-green-500 hover:bg-green-600 active:bg-green-800 text-white 
+               font-bold text-lg text-center rounded-lg" @click="hit"
+          :class="showHit ? 'none' : 'bg-gray-600 btn-disabled'">
           HIT
         </button>
-        <button type="button"  class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white 
+        <button type="button" class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white 
                font-bold text-lg text-center rounded-lg" @click="stay"> STAY
         </button>
       </div>
