@@ -6,6 +6,7 @@ let bg_first = ref(true);
 const bg_first_func = () => {
   bg_first.value = false;
 }
+let showHit = ref(true)
 
 //variable game
 let deck = [];
@@ -13,9 +14,8 @@ let dealerPoint = ref(0);
 let playerPoint = ref(0);
 let dealerArr = [];
 let playerArr = [];
-let showHit = ref(true)
 
-
+let firstCard = [];
 //Call Functions
 window.onload = function () {
   buildDeck();
@@ -27,6 +27,7 @@ window.onload = function () {
 function buildDeck() {
   let points = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
   let types = ["A", "C", "N", "T"];
+  // let types = ["C", "D", "H", "S"];
   for (const type of types) {
     for (const point of points) {
       deck.push(point + "-" + type);  // A-A , 2-A , ... , K-T
@@ -45,22 +46,28 @@ function shuffleDeck() {
 }
 
 function startGame() {
+  // FirstCard
+  let card = deck.shift(); // J-T
+  firstCard.push(getPicture(card));
+  dealerPoint.value += getPoint(card);
+
+  // Dealer
+  let cardDealer = deck.shift(); // A-A
+  dealerArr.push(getPicture(cardDealer));
+  dealerPoint.value += getPoint(cardDealer);
   for (let i = 0; i < 2; i++) { // D > P > D > P
-    // D
-    let cardDealer = deck.shift(); // J-T
-    dealerArr.push(getPicture(cardDealer));
-    dealerPoint.value += getPoint(cardDealer);
-    // P
+    // Player
     let cardPlayer = deck.shift();
     playerArr.push(getPicture(cardPlayer));
     playerPoint.value += getPoint(cardPlayer);
   }
-  console.log(dealerPoint);
-  console.log(playerPoint);
+  // console.log(dealerPoint.value);
+  // console.log(playerPoint.value);
 }
 
 function getPicture(card) {
   let src = 'img/All-card-final/' + card + '.png';
+  // let src = 'testcard/cards/' + card + '.png';
   return src;
 }
 
@@ -76,22 +83,21 @@ function hit() {
   playerPoint.value += getPoint(cardPlayer);
   if (playerPoint.value > 21) {
     playerPoint.value = 'BUSTED';
-    showHit.value = false;
-    alert('U R LOSSER')
+    // alert('B U S T E D')
     stay();
   }
-  console.log(playerPoint);
 }
 
 function stay() {
+  showHit.value = false;
   if (dealerPoint.value > playerPoint.value) {
-    console.log('Lose');
+    alert('Lose');
   }
   if (dealerPoint.value < playerPoint.value) {
-    console.log('Win');
+    alert('Win');
   }
   if (dealerPoint.value == playerPoint.value) {
-    console.log('Tie');
+    alert('Tie');
   }
 }
 </script>
@@ -146,11 +152,13 @@ function stay() {
       <!-- Dealer -->
       <div class="w-full pt-6">
         <div class="flex justify-center space-x-5" ref="imgCardDealer">
+          <img v-if="showHit" src="img/All-card-final/backcard/back_card.svg" class="w-32">
+          <img v-else :src="firstCard" class="w-32">
           <img v-for="card in dealerArr" :src=card class="w-32">
         </div>
       </div>
       <h1 class="flex justify-center text-white font-bold text-xl py-4">
-        Dealer: {{ dealerPoint }}
+        Dealer: <span v-show="!showHit">{{ dealerPoint }}</span>
       </h1>
 
       <!-- Button -->
