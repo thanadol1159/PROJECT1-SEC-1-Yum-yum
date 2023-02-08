@@ -75,8 +75,9 @@ function hit() {
   playerArr.push(getPicture(cardPlayer));
   playerPoint.value += getPoint(cardPlayer);
   if (playerPoint.value > 21) {
-    playerPoint.value = 'BUSTED'
-    showHit.value = false
+    playerPoint.value = 'BUSTED';
+    showHit.value = false;
+    stay();
   }
   console.log(playerPoint);
 }
@@ -86,7 +87,7 @@ function stay() {
     console.log('Lose');
   }
   if (dealerPoint.value < playerPoint.value) {
-    console.log('Lose');
+    console.log('Win');
   }
   if (dealerPoint.value == playerPoint.value) {
     console.log('Tie');
@@ -154,10 +155,10 @@ function stay() {
       <!-- Button -->
       <div class="w-full flex justify-center space-x-8 h-8">
         <button class="px-6 bg-green-500 hover:bg-green-600 active:bg-green-800 text-white 
-               font-bold text-lg text-center rounded-lg" @click="hit" v-show="showHit">
+               font-bold text-lg text-center rounded-lg"  @click="hit" :class=" showHit ? 'bg-green-500' : 'bg-gray-500 btn-disabled cursor-not-allowed'">
           HIT
         </button>
-        <button class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white 
+        <button type="button"  class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white 
                font-bold text-lg text-center rounded-lg" @click="stay"> STAY
         </button>
       </div>
