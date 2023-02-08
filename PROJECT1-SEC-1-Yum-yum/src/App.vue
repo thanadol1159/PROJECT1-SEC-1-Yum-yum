@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-
+import setting from "./components/icons/SystemUiconsSettings.vue";
 //variable
 let bg_first = ref(true)
 const bg_first_func = () => {
@@ -45,7 +45,14 @@ function shuffleDeck() {
   }
   console.log(deck);
 }
+function openNav() {
+  document.getElementById("slideBar").style.width = "384px";
+  document.getElementById("slideBar").style.display = "block";
+}
 
+function closeNav() {
+  document.getElementById("slideBar").style.width = "0";
+}
 // function startGame() {
 //   let cardDealer = deck.shift(); //first Card
 //   // console.log(cardDealer);
@@ -65,13 +72,15 @@ function shuffleDeck() {
   <!-- <div @click="clickToStart" class="absolute bg-red-300 z-10 p-40" v-show="rule"></div> -->
 
   <div class="w-screen h-screen">
+
     <!-- BG Fix -->
     <div class="bg-bottom bg-cover bg-no-repeat w-full h-full bg-[url('./src/assets/img/bg-fix-fix.png')]">
       <!-- BG Blur -->
-      <div class="absolute w-screen h-screen bg-bottom bg-cover bg-no-repeat bg-[url('../src/assets/img/bg-blur.jpg')]"
+      <div
+        class="absolute w-screen h-screen z-20 bg-bottom bg-cover bg-no-repeat bg-[url('../src/assets/img/bg-blur.jpg')]"
         @click="bg_first_func" v-show="bg_first">
         <h1 class="w-full flex justify-center mt-9 
-        font-sans font-extrabold text-9xl tracking-wider text-white">
+        font-sans font-extrabold text-9xl tracking-widest text-white">
           BLACKJACK
         </h1>
         <h4 class="w-full font-sans font-semibold text-3xl flex justify-center 
@@ -80,6 +89,65 @@ function shuffleDeck() {
         </h4>
       </div>
 
+      <!-- navbar -->
+      <!-- <div class="slide-bar">
+        <div id="slideBar"
+          class="hidden w-96 fixed text-white z-50 h-screen top-0 right-0 bg-black overflow-hidden float-right ease-in duration-300"> -->
+      <!-- bar -->
+      <!-- <div>
+            <ul>
+              <li class="pb-16 mt-3"><a class="absolute left-5 text-5xl hover:text-slate-400 " href="javascript:void(0)"
+                  v-on:click="closeNav()">×</a></li>
+              <li><img class="w-24 m-auto" src="../src/assets/img/back_card.png"></li>
+              <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">RESUME</a></li>
+              <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">RULE</a></li>
+              <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">QUIT</a></li>
+            </ul>
+          </div> -->
+      <!-- play music -->
+      <!-- <div class="flex pr-2 pt-36 justify-center flex-row">
+            <p class="text-2xl pr-3 -top-1.5">music</p>
+            <audio class="hidden" controls id="song">
+              <source src="" type="audio/ogg">
+            </audio>
+            <input type="range" min="1" max="100" value="50" id="volume" />
+            <p id="on" class="text-2xl pl-5 -top-1.5 cursor-pointer text-orange-400" v-on:click="onMusic()">on</p>
+            <p id="off" class="text-2xl pl-5 -top-1.5 cursor-pointer" v-on:click="offMusic()">off</p>
+
+            <input type="text" name="on" v-model="onMusic">
+            <input type="text" name="off" v-model="offMusic">
+          </div>
+        </div>
+        <button id="setting"
+          class="block text-7xl cursor-pointer text-white hover:text-slate-400 float-right right-3 top-3"
+          v-on:click="openNav()">
+          <SystemUiconsSettings />
+        </button>
+      </div> -->
+
+      <div class="drawer drawer-end absolute">
+        <!-- <button id="setting"
+          class="block text-7xl cursor-pointer text-white hover:text-slate-400 float-right right-3 top-3"
+          v-on:click="openNav()">
+        </button> -->
+        <!-- <setting id="my-drawer-4" class="drawer-toggle"/> -->
+        <input id="my-drawer-4" type="checkbox" class="drawer-toggle flex justify-end" />
+        <div class="drawer-content">
+          <!-- Page content here -->
+          <label for="my-drawer-4" class="drawer-button btn btn-primary float-right mt-3 mr-3">Open drawer</label>
+        </div>
+        <div class="drawer-side">
+          <label for="my-drawer-4" class="drawer-overlay"></label>
+          <ul class="menu p-4 w-80 bg-base-100 text-base-content">
+            <!-- Sidebar content here -->
+            <li class="pb-16 mt-3"><a class="absolute left-5 text-5xl hover:text-slate-400 " href="javascript:void(0)">×</a></li>
+              <li><img class="w-24 m-auto" src="../src/assets/img/back_card.png"></li>
+              <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">RESUME</a></li>
+              <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">RULE</a></li>
+              <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">QUIT</a></li>
+          </ul>
+        </div>
+      </div>
       <!-- Score -->
       <div class="flex justify-center items-center" v-show="!bg_first">
         <div class="relative flex justify-center">
@@ -98,11 +166,12 @@ function shuffleDeck() {
 
       <!-- Btn How to Play -->
       <div class="w-full absolute" v-show="!bg_first">
-        <label for="my-modal-4" class="btn w-14 rounded-full text-center align-middle font-bold text-2xl ml-10"> ? </label>
+        <label for="my-modal-4" class="btn w-14 rounded-full text-center align-middle font-bold text-2xl ml-10"> ?
+        </label>
 
         <input type="checkbox" id="my-modal-4" class="modal-toggle" />
         <label for="my-modal-4" class="modal cursor-pointer">
-          <label class="modal-box relative bg-red-400" for="">
+          <label class="modal-box relative bg-white" for="">
             <h3 class="text-lg font-bold">Congratulations random Internet user!</h3>
             <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!
             </p>
