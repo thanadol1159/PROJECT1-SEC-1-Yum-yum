@@ -88,7 +88,7 @@ function shuffleDeck() {
           <div class="absolute top-0 m-auto z-30 round">
             <span class="flex justify-center items-center w-60 h-12 font-lg font-bold">1 - 0</span>
           </div>
-          <div class="player absolute m-auto z-20 flex items-center top-0 bx6  justify-around">
+          <div class="player absolute m-auto z-20 flex items-center top-0 bx6 justify-around">
             <div class="flex">PLAYER:</div>
             <div class="flex"></div>
             <div class="flex">DEALER:</div>
@@ -98,16 +98,22 @@ function shuffleDeck() {
 
       <!-- Btn How to Play -->
       <div class="w-full absolute" v-show="!bg_first">
-        <button class="px-3 py-1 mr-12 float-right
-         bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 text-black 
-               font-bold text-lg text-center rounded-lg" @click="how_to_play_func">
-          How to Play
-        </button>
+        <label for="my-modal-4" class="btn w-14 rounded-full text-center align-middle font-bold text-2xl ml-10"> ? </label>
+
+        <input type="checkbox" id="my-modal-4" class="modal-toggle" />
+        <label for="my-modal-4" class="modal cursor-pointer">
+          <label class="modal-box relative bg-red-400" for="">
+            <h3 class="text-lg font-bold">Congratulations random Internet user!</h3>
+            <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!
+            </p>
+          </label>
+        </label>
       </div>
+
 
       <!-- Text How to play -->
       <div class="rule absolute w-2/5 h-4/5 bg-white opacity-90" v-show="how_to_play">
-        <p class="pt-6 text-center text-3xl">อธิบายการเล่น</p>
+        <p class="pt-6 text-center text-3xl">HOW TO PLAY</p>
       </div>
 
       <!-- Dealer -->
