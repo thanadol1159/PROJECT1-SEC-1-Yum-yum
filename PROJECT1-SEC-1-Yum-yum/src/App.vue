@@ -1,13 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-
 //variable
 let bg_first = ref(true);
 const bg_first_func = () => {
   bg_first.value = false;
 }
 let showHit = ref(true)
-
 //variable game
 let deck = [], dealerArr = [], playerArr = [];
 let dealerPoint = ref(0);
@@ -15,9 +13,10 @@ let playerPoint = ref(0);
 let playerScorePoint = ref(0);
 let dealerScorePoint = ref(0);
 let numRound = ref(1);
-let testA = ["2-S", "3-C", "A-C", "7-D", "2-H", "2-S", "2-S", "2-S"]
-
+let textWLB = ref();
+// let testA = ["2-S", "3-C", "A-C", "7-D", "2-H", "5-S", "9-S", "2-S"]
 let firstCard = [];
+
 //Call Functions
 window.onload = function () {
   buildDeck();
@@ -49,22 +48,21 @@ function shuffleDeck() {
 
 function startGame() {
   // FirstCard
-  let card = testA.shift(); // J-T
+  let card = deck.shift(); // J-T
   firstCard.push(getPicture(card));
-  dealerPoint.value += getPoint(card);
-
+  dealerPoint.value += getPoint(card, dealerPoint);
   // Dealer
-  let cardDealer = testA.shift(); // A-A
+  let cardDealer = deck.shift();
   dealerArr.push(getPicture(cardDealer));
-  dealerPoint.value += getPoint(cardDealer);
-  for (let i = 0; i < 2; i++) { // D > P > D > P
+  dealerPoint.value += getPoint(cardDealer, dealerPoint);
+  for (let i = 0; i < 2; i++) {
     // Player
-    let cardPlayer = testA.shift();
+    let cardPlayer = deck.shift();
     playerArr.push(getPicture(cardPlayer));
-    playerPoint.value += getPoint(cardPlayer);
+    playerPoint.value += getPoint(cardPlayer, playerPoint);
   }
-  // console.log(dealerPoint.value);
-  // console.log(playerPoint.value);
+  console.log(playerPoint.value);
+  console.log(dealerPoint.value);
 }
 
 function getPicture(card) {
@@ -73,37 +71,50 @@ function getPicture(card) {
   return src;
 }
 
-function getPoint(card) {
+function getPoint(card, yourPoint) {
   let point = card.split("-")[0] // "6-T" -> ["6", "T"]
-  point == 'A' ? (playerPoint.value + 11 > 21) ? point = 1 : point = 11 : isNaN(point) ? point = 10 : point
+  point == 'A' ? (yourPoint.value + 11 > 21) ? point = 1 : point = 11 : isNaN(point) ? point = 10 : point
   return parseInt(point);
 }
 
 function hit() {
-  let cardPlayer = testA.shift();
+  let cardPlayer = deck.shift();
   playerArr.push(getPicture(cardPlayer));
-  playerPoint.value += getPoint(cardPlayer);
+  playerPoint.value += getPoint(cardPlayer, playerPoint);
   if (playerPoint.value > 21) {
-    playerPoint.value = 'BUST'
-    // alert('B U S T E D')
-    dealerScorePoint.value++
-    stay()
     showHit.value = false;
+    textWLB.value = "BUST"
+    stay()
   }
 }
 
 function stay() {
   showHit.value = false;
-  if (dealerPoint.value > playerPoint.value) {
-    alert('Lose');
+  if (textWLB.value != "BUST" && dealerPoint.value < 17) {
+    for (let i = 1; dealerPoint.value < 17; i++) {
+      let cardDealer = deck.shift();
+      dealerArr.push(getPicture(cardDealer));
+      dealerPoint.value += getPoint(cardDealer, dealerPoint);
+      if (dealerPoint.value > 21) {
+        dealerPoint.value = "BUST"
+        playerScorePoint.value++
+      }
+    }
+  }
+  if (textWLB.value == "BUST") {
+    textWLB.value = "BUST"
     dealerScorePoint.value++
   }
-  if (dealerPoint.value < playerPoint.value) {
-    alert('Win');
+  else if (dealerPoint.value > playerPoint.value) {
+    textWLB.value = "Lose"
+    dealerScorePoint.value++
+  }
+  else if (dealerPoint.value < playerPoint.value) {
+    textWLB.value = "Win"
     playerScorePoint.value++
   }
-  if (dealerPoint.value == playerPoint.value) {
-    alert('Tie');
+  else if (dealerPoint.value == playerPoint.value) {
+    textWLB.value = "Tie"
   }
 }
 </script>
@@ -128,7 +139,9 @@ function stay() {
       <!-- Score -->
       <div class="flex justify-center items-center text-stone-900" v-show="!bg_first">
         <div class="relative flex justify-center">
-          <div class="totalScore z-10 relative flex items-center justify-center "><span class="pt-10 "> Round: {{ numRound }} </span>
+          <div class="totalScore z-10 relative flex items-center justify-center "><span class="pt-10 "> Round: {{
+            numRound
+          }} </span>
           </div>
           <div class="absolute top-0 m-auto z-30 round">
             <span class="compare flex justify-center items-center w-60  text-2xl font-bold">
@@ -140,7 +153,7 @@ function stay() {
           <div class="player absolute m-auto z-20 flex items-center top-0 bx6  justify-around">
             <div class="flex">PLAYER: {{ playerPoint }}</div>
             <div class="flex w-16"></div>
-            <div class="flex">DEALER: {{ dealerPoint }}</div>
+            <div class="flex">DEALER: <span v-show="!showHit">{{ dealerPoint }}</span></div>
           </div>
         </div>
       </div>
@@ -167,7 +180,7 @@ function stay() {
           <img v-for="card in dealerArr" :src=card class="w-32">
           <!-- popup -->
           <div v-show="!showHit">
-
+            {{ textWLB }}
           </div>
         </div>
       </div>
@@ -177,11 +190,13 @@ function stay() {
       <!-- Button -->
       <div class="w-full flex justify-center space-x-8 h-8">
         <button type="button" class="px-6 bg-green-500 hover:bg-green-600 active:bg-green-800 text-white 
-               font-bold text-lg text-center rounded-lg" @click="hit" :class="showHit ? 'none' : 'bg-gray-500 btn-disabled'">
+               font-bold text-lg text-center rounded-lg" @click="hit" :disabled="!showHit"
+          :class="showHit ? 'none' : 'bg-gray-500 hover:bg-gray-500 active:bg-gray-500 cursor-not-allowed'">
           HIT
         </button>
         <button type="button" class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white 
-               font-bold text-lg text-center rounded-lg" @click="stay" :class="showHit ? 'none' : 'bg-gray-500 btn-disabled'">
+               font-bold text-lg text-center rounded-lg" @click="stay" :disabled="!showHit"
+          :class="showHit ? 'none' : 'bg-gray-500 hover:bg-gray-500 active:bg-gray-500 cursor-not-allowed'">
           STAY
         </button>
       </div>
