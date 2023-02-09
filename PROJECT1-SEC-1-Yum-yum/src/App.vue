@@ -27,8 +27,8 @@ window.onload = function () {
 //Deck
 function buildDeck() {
   let points = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-  // let types = ["A", "C", "N", "T"];
-  let types = ["C", "D", "H", "S"];
+  let types = ["A", "C", "N", "T"];
+  // let types = ["C", "D", "H", "S"];
   for (const type of types) {
     for (const point of points) {
       deck.push(point + "-" + type);  // A-A , 2-A , ... , K-T
@@ -66,8 +66,8 @@ function startGame() {
 }
 
 function getPicture(card) {
-  // let src = 'img/All-card-final/' + card + '.png';
-  let src = 'testcard/cards/' + card + '.png';
+  let src = 'img/All-card-final/' + card + '.png';
+  // let src = 'testcard/cards/' + card + '.png';
   return src;
 }
 
@@ -196,7 +196,7 @@ function stay() {
         </button>
         <button type="button" class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white 
                font-bold text-lg text-center rounded-lg" @click="stay" :disabled="!showHit"
-          :class="showHit ? 'none' : 'bg-gray-500 hover:bg-gray-500 active:bg-gray-500 cursor-not-allowed'">
+          :class="showHit ? 'none' : 'bg-gray-600 hover:bg-gray-600 active:bg-gray-600 cursor-not-allowed'">
           STAY
         </button>
       </div>
