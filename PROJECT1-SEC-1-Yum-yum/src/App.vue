@@ -14,7 +14,8 @@ let dealerPoint = ref(0);
 let playerPoint = ref(0);
 let playerScorePoint = ref(0);
 let dealerScorePoint = ref(0);
-let testA = ["2-S","3-C","A-C","A-D","A-H","A-S"]
+let numRound = ref(1);
+let testA = ["2-S", "3-C", "A-C", "7-D", "2-H", "2-S", "2-S", "2-S"]
 
 let firstCard = [];
 //Call Functions
@@ -83,10 +84,11 @@ function hit() {
   playerArr.push(getPicture(cardPlayer));
   playerPoint.value += getPoint(cardPlayer);
   if (playerPoint.value > 21) {
-    playerPoint.value = 'BUSTED';
+    playerPoint.value = 'BUST'
     // alert('B U S T E D')
     dealerScorePoint.value++
     stay()
+    showHit.value = false;
   }
 }
 
@@ -124,19 +126,21 @@ function stay() {
       </div>
 
       <!-- Score -->
-      <div class="flex justify-center items-center" v-show="!bg_first">
+      <div class="flex justify-center items-center text-stone-900" v-show="!bg_first">
         <div class="relative flex justify-center">
-          <div class="totalScore z-10 relative flex items-center justify-center "><span class="pt-10 "> Round: </span>
+          <div class="totalScore z-10 relative flex items-center justify-center "><span class="pt-10 "> Round: {{ numRound }} </span>
           </div>
           <div class="absolute top-0 m-auto z-30 round">
-            <span class="flex justify-center items-center w-60 h-12 font-lg font-bold">
-              {{ playerScorePoint }} - {{ dealerScorePoint }}
+            <span class="compare flex justify-center items-center w-60  text-2xl font-bold">
+              <span class="text-teal-300 mr-4">{{ playerScorePoint }}</span> - <span class="text-rose-600 ml-4">{{
+                dealerScorePoint
+              }} </span>
             </span>
           </div>
           <div class="player absolute m-auto z-20 flex items-center top-0 bx6  justify-around">
-            <div class="flex">PLAYER:</div>
-            <div class="flex"></div>
-            <div class="flex">DEALER:</div>
+            <div class="flex">PLAYER: {{ playerPoint }}</div>
+            <div class="flex w-16"></div>
+            <div class="flex">DEALER: {{ dealerPoint }}</div>
           </div>
         </div>
       </div>
@@ -161,28 +165,30 @@ function stay() {
           <img v-if="showHit" src="img/All-card-final/backcard/back_card.svg" class="w-32">
           <img v-else :src="firstCard" class="w-32">
           <img v-for="card in dealerArr" :src=card class="w-32">
+          <!-- popup -->
+          <div v-show="!showHit">
+
+          </div>
         </div>
       </div>
       <h1 class="flex justify-center text-white font-bold text-xl py-4">
-        Dealer: <span v-show="!showHit">{{ dealerPoint }}</span>
       </h1>
 
       <!-- Button -->
       <div class="w-full flex justify-center space-x-8 h-8">
         <button type="button" class="px-6 bg-green-500 hover:bg-green-600 active:bg-green-800 text-white 
-               font-bold text-lg text-center rounded-lg" @click="hit"
-          :class="showHit ? 'none' : 'bg-gray-600 btn-disabled'">
+               font-bold text-lg text-center rounded-lg" @click="hit" :class="showHit ? 'none' : 'bg-gray-500 btn-disabled'">
           HIT
         </button>
         <button type="button" class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white 
-               font-bold text-lg text-center rounded-lg" @click="stay"> STAY
+               font-bold text-lg text-center rounded-lg" @click="stay" :class="showHit ? 'none' : 'bg-gray-500 btn-disabled'">
+          STAY
         </button>
       </div>
 
       <!-- Player -->
       <div class="w-full">
         <h1 class="flex justify-center text-white font-bold text-xl py-4">
-          Player: {{ playerPoint }}
         </h1>
         <div class="flex justify-center space-x-5" ref="imgCardPlayer">
           <img v-for="card in playerArr" :src=card class="w-32">
@@ -196,6 +202,10 @@ function stay() {
 .rule {
   left: 30%;
   top: 14%;
+}
+
+.compare {
+  height: 40px;
 }
 
 .totalScore {
