@@ -14,7 +14,7 @@ let dealerPoint = ref(0);
 let playerPoint = ref(0);
 let playerScorePoint = ref(0);
 let dealerScorePoint = ref(0);
-
+let testA = ["2-S","3-C","A-C","A-D","A-H","A-S"]
 
 let firstCard = [];
 //Call Functions
@@ -27,8 +27,8 @@ window.onload = function () {
 //Deck
 function buildDeck() {
   let points = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-  let types = ["A", "C", "N", "T"];
-  // let types = ["C", "D", "H", "S"];
+  // let types = ["A", "C", "N", "T"];
+  let types = ["C", "D", "H", "S"];
   for (const type of types) {
     for (const point of points) {
       deck.push(point + "-" + type);  // A-A , 2-A , ... , K-T
@@ -48,17 +48,17 @@ function shuffleDeck() {
 
 function startGame() {
   // FirstCard
-  let card = deck.shift(); // J-T
+  let card = testA.shift(); // J-T
   firstCard.push(getPicture(card));
   dealerPoint.value += getPoint(card);
 
   // Dealer
-  let cardDealer = deck.shift(); // A-A
+  let cardDealer = testA.shift(); // A-A
   dealerArr.push(getPicture(cardDealer));
   dealerPoint.value += getPoint(cardDealer);
   for (let i = 0; i < 2; i++) { // D > P > D > P
     // Player
-    let cardPlayer = deck.shift();
+    let cardPlayer = testA.shift();
     playerArr.push(getPicture(cardPlayer));
     playerPoint.value += getPoint(cardPlayer);
   }
@@ -67,19 +67,19 @@ function startGame() {
 }
 
 function getPicture(card) {
-  let src = 'img/All-card-final/' + card + '.png';
-  // let src = 'testcard/cards/' + card + '.png';
+  // let src = 'img/All-card-final/' + card + '.png';
+  let src = 'testcard/cards/' + card + '.png';
   return src;
 }
 
 function getPoint(card) {
   let point = card.split("-")[0] // "6-T" -> ["6", "T"]
-  point == 'A' ? point = 11 : isNaN(point) ? point = 10 : point
+  point == 'A' ? (playerPoint.value + 11 > 21) ? point = 1 : point = 11 : isNaN(point) ? point = 10 : point
   return parseInt(point);
 }
 
 function hit() {
-  let cardPlayer = deck.shift();
+  let cardPlayer = testA.shift();
   playerArr.push(getPicture(cardPlayer));
   playerPoint.value += getPoint(cardPlayer);
   if (playerPoint.value > 21) {
