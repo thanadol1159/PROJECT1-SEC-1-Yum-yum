@@ -9,11 +9,12 @@ const bg_first_func = () => {
 let showHit = ref(true)
 
 //variable game
-let deck = [];
+let deck = [], dealerArr = [], playerArr = [];
 let dealerPoint = ref(0);
 let playerPoint = ref(0);
-let dealerArr = [];
-let playerArr = [];
+let playerScorePoint = ref(0);
+let dealerScorePoint = ref(0);
+
 
 let firstCard = [];
 //Call Functions
@@ -84,7 +85,8 @@ function hit() {
   if (playerPoint.value > 21) {
     playerPoint.value = 'BUSTED';
     // alert('B U S T E D')
-    stay();
+    dealerScorePoint.value++
+    stay()
   }
 }
 
@@ -92,9 +94,11 @@ function stay() {
   showHit.value = false;
   if (dealerPoint.value > playerPoint.value) {
     alert('Lose');
+    dealerScorePoint.value++
   }
   if (dealerPoint.value < playerPoint.value) {
     alert('Win');
+    playerScorePoint.value++
   }
   if (dealerPoint.value == playerPoint.value) {
     alert('Tie');
@@ -120,12 +124,14 @@ function stay() {
       </div>
 
       <!-- Score -->
-      <!-- <div class="flex justify-center items-center" v-show="!bg_first">
+      <div class="flex justify-center items-center" v-show="!bg_first">
         <div class="relative flex justify-center">
           <div class="totalScore z-10 relative flex items-center justify-center "><span class="pt-10 "> Round: </span>
           </div>
           <div class="absolute top-0 m-auto z-30 round">
-            <span class="flex justify-center items-center w-60 h-12 font-lg font-bold">1 - 0</span>
+            <span class="flex justify-center items-center w-60 h-12 font-lg font-bold">
+              {{ playerScorePoint }} - {{ dealerScorePoint }}
+            </span>
           </div>
           <div class="player absolute m-auto z-20 flex items-center top-0 bx6  justify-around">
             <div class="flex">PLAYER:</div>
@@ -133,7 +139,7 @@ function stay() {
             <div class="flex">DEALER:</div>
           </div>
         </div>
-      </div> -->
+      </div>
 
       <!-- Btn How to Play -->
       <!-- <div class="w-full absolute" v-show="!bg_first">
