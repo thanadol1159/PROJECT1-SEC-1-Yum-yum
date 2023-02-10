@@ -12,9 +12,12 @@ let dealerPoint = ref(0);
 let playerPoint = ref(0);
 let playerScorePoint = ref(0);
 let dealerScorePoint = ref(0);
+let dealercountAce = ref(0);
+let playercountAce = ref(0);
+
 let numRound = ref(1);
 let textWLB = ref();
-// let testA = ["2-S", "3-C", "A-C", "7-D", "2-H", "5-S", "9-S", "2-S"]
+// let testA = ["2-S", "3-C", "A-C", "A-D", "2-H", "5-S", "7-H", "2-S", "A-H", "5-D"] //testcase
 let firstCard = [];
 
 //Call Functions
@@ -50,19 +53,17 @@ function startGame() {
   // FirstCard
   let card = deck.shift(); // J-T
   firstCard.push(getPicture(card));
-  dealerPoint.value += getPoint(card, dealerPoint);
+  dealerPoint.value += getPoint(card, dealerPoint, dealercountAce);
   // Dealer
   let cardDealer = deck.shift();
   dealerArr.push(getPicture(cardDealer));
-  dealerPoint.value += getPoint(cardDealer, dealerPoint);
+  dealerPoint.value += getPoint(cardDealer, dealerPoint, dealercountAce);
   for (let i = 0; i < 2; i++) {
     // Player
     let cardPlayer = deck.shift();
     playerArr.push(getPicture(cardPlayer));
-    playerPoint.value += getPoint(cardPlayer, playerPoint);
+    playerPoint.value += getPoint(cardPlayer, playerPoint, playercountAce);
   }
-  console.log(playerPoint.value);
-  console.log(dealerPoint.value);
 }
 
 function getPicture(card) {
@@ -71,16 +72,20 @@ function getPicture(card) {
   return src;
 }
 
-function getPoint(card, yourPoint) {
+function getPoint(card, yourPoint, countAce) {
   let point = card.split("-")[0] // "6-T" -> ["6", "T"]
-  point == 'A' ? (yourPoint.value + 11 > 21) ? point = 1 : point = 11 : isNaN(point) ? point = 10 : point
+  point == 'A' ? (yourPoint.value + 11 > 21) ? point = 1 : (point = 11, countAce.value++) : isNaN(point) ? point = 10 : point
+  if (countAce.value == 1 && yourPoint.value + parseInt(point) > 21) {
+    countAce.value--
+    point -= 10
+  }
   return parseInt(point);
 }
 
 function hit() {
   let cardPlayer = deck.shift();
   playerArr.push(getPicture(cardPlayer));
-  playerPoint.value += getPoint(cardPlayer, playerPoint);
+  playerPoint.value += getPoint(cardPlayer, playerPoint, playercountAce);
   if (playerPoint.value > 21) {
     showHit.value = false;
     textWLB.value = "BUST"
@@ -94,7 +99,7 @@ function stay() {
     for (let i = 1; dealerPoint.value < 17; i++) {
       let cardDealer = deck.shift();
       dealerArr.push(getPicture(cardDealer));
-      dealerPoint.value += getPoint(cardDealer, dealerPoint);
+      dealerPoint.value += getPoint(cardDealer, dealerPoint, dealercountAce);
       if (dealerPoint.value > 21) {
         dealerPoint.value = "BUST"
         playerScorePoint.value++
