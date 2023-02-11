@@ -2,10 +2,11 @@
 import SystemUiconsSettings from "./components/icons/SystemUiconsSettings.vue";
 import { ref } from 'vue'
 // import { useEventListener } from '@vueuse/core'
-
-
+// ‘Yours’.mp3
+// window.onload() = ( new Audio( require('../src/song/‘Yours’.mp3') )).play();
 
 let onOff = ref(1)
+
 function openNav() {
   document.getElementById("slideBar").style.width = "384px";
   document.getElementById("slideBar").style.display = "block";
@@ -15,18 +16,6 @@ function closeNav() {
   document.getElementById("slideBar").style.width = "0";
 }
 
-const currentVolume = document.querySelector("#volume");
-// let track = document.querySelector("#track");
-let audio = document.createElement("audio");
-
-// currentVolume.addEventListener("change",changeVolume);
-// currentVolume.useEventListener(() => {
-//   track.volume = currentVolume.value / 100;
-// })
-function changeVolume(){
-    track.volume = currentVolume.value / 100;
-}
-// changeVolume()
 
 function onMusic() { 
   song.play();
@@ -38,6 +27,20 @@ function offMusic() {
   onOff.value = 0
 } 
 
+const currentVolume = document.querySelector("#volume");
+function changeVolume(){
+    song.volume = currentVolume.value / 100;
+}
+// changeVolume()
+
+
+// let track = document.querySelector("#song");
+// let audio = document.createElement("audio");
+
+// currentVolume.addEventListener("change",changeVolume);
+// currentVolume.useEventListener(() => {
+//   track.volume = currentVolume.value / 100;
+// })
 </script>
 
 <template>
@@ -50,7 +53,7 @@ function offMusic() {
           <ul>
            <li class="pb-16 mt-3"><a class="absolute left-5 text-5xl hover:text-slate-400 " href="javascript:void(0)" v-on:click="closeNav()">×</a></li>
            <li><img class="w-24 m-auto" src="../src/assets/img/back_card.png"></li>
-           <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">RESUME</a></li>
+           <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" @click="closeNav()">RESUME</a></li>
            <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">RULE</a></li>
            <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">QUIT</a></li>
         </ul> 
@@ -58,9 +61,9 @@ function offMusic() {
         <!-- play music -->
         <div class="flex pr-2 pt-36 justify-center flex-row" >
           <p class="text-2xl pr-3 -top-1.5" >music</p>
-          <audio class="hidden" id="song" src="../src/song/‘Yours’.mp3" type="audio/ogg"></audio>
+          <audio class="hidden" id="song" src="../src/song/‘Yours’.mp3" autoplay loop type="audio/ogg"></audio>
 
-          <input type="range" min="1" max="100" value="50" id="volume" 
+          <input type="range" min="1" max="100" value="50" id="volume" @click="changeVolume()"
          />
 
           <label :class="onOff === 1 ? 'text-orange-400' : ' text-white'"
