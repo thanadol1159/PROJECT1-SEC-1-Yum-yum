@@ -3,7 +3,9 @@ import SystemUiconsSettings from "./components/icons/SystemUiconsSettings.vue";
 import { ref } from 'vue'
 // import { useEventListener } from '@vueuse/core'
 
-let onOff = ref(false)
+
+
+let onOff = ref('')
 function openNav() {
   document.getElementById("slideBar").style.width = "384px";
   document.getElementById("slideBar").style.display = "block";
@@ -15,7 +17,7 @@ function closeNav() {
 
 const currentVolume = document.querySelector("#volume");
 // let track = document.querySelector("#track");
-// let track = document.createElement("audio");
+let audio = document.createElement("audio");
 
 // currentVolume.addEventListener("change",changeVolume);
 // currentVolume.useEventListener(() => {
@@ -27,12 +29,12 @@ function changeVolume(){
 // changeVolume()
 
 function onMusic() { 
-  track.play();
+  song.play();
   onOff = ref(true);
 } 
   
 function offMusic() { 
-  track.pause();
+  song.pause();
   onOff = ref(false);
 } 
 
@@ -56,7 +58,7 @@ function offMusic() {
         <!-- play music -->
         <div class="flex pr-2 pt-36 justify-center flex-row" >
           <p class="text-2xl pr-3 -top-1.5" >music</p>
-          <audio class="hidden" controls id="track"><source src="../src/song/‘Yours’.mp3" type="audio/ogg"></audio>
+          <audio class="hidden" id="song" src="../src/song/‘Yours’.mp3" type="audio/ogg"></audio>
 
           <input type="range" min="1" max="100" value="50" id="volume" 
          />
