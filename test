@@ -5,7 +5,7 @@ import { ref } from 'vue'
 
 
 
-let onOff = ref('')
+let onOff = ref(1)
 function openNav() {
   document.getElementById("slideBar").style.width = "384px";
   document.getElementById("slideBar").style.display = "block";
@@ -30,12 +30,12 @@ function changeVolume(){
 
 function onMusic() { 
   song.play();
-  onOff = ref(true);
+  onOff.value = 1
 } 
   
 function offMusic() { 
   song.pause();
-  onOff = ref(false);
+  onOff.value = 0
 } 
 
 </script>
@@ -63,11 +63,11 @@ function offMusic() {
           <input type="range" min="1" max="100" value="50" id="volume" 
          />
 
-          <label :class="onOff ? 'text-orange-400' : ' text-white'"
-           class="text-2xl pl-5 -top-1.5 cursor-pointer"  for="on">on</label>
+          <label :class="onOff === 1 ? 'text-orange-400' : ' text-white'"
+           class="text-2xl pl-5 -top-1.5 cursor-pointer "  for="on">on</label>
           <input type="text" class="hidden" id="on" v-on:click="onMusic()"  checked v-model="onOff"/>
 
-          <label :class="onOff ? 'text-white' : ' text-orange-400'"
+          <label :class="onOff === 0 ? 'text-orange-400' : ' text-white'"
            class="text-2xl pl-5 -top-1.5 cursor-pointer" for="off">off</label>
           <input type="text" class="hidden" id="off" v-on:click="offMusic()" checked v-model="onOff"/>
         </div>
