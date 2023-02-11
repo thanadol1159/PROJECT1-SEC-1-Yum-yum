@@ -1,5 +1,9 @@
 <script setup>
 import SystemUiconsSettings from "./components/icons/SystemUiconsSettings.vue";
+import { ref } from 'vue'
+// import { useEventListener } from '@vueuse/core'
+
+let onOff = ref(false)
 function openNav() {
   document.getElementById("slideBar").style.width = "384px";
   document.getElementById("slideBar").style.display = "block";
@@ -8,21 +12,30 @@ function openNav() {
 function closeNav() {
   document.getElementById("slideBar").style.width = "0";
 }
-  
+
+const currentVolume = document.querySelector("#volume");
+// let track = document.querySelector("#track");
+// let track = document.createElement("audio");
+
+// currentVolume.addEventListener("change",changeVolume);
+// currentVolume.useEventListener(() => {
+//   track.volume = currentVolume.value / 100;
+// })
+function changeVolume(){
+    track.volume = currentVolume.value / 100;
+}
+// changeVolume()
+
 function onMusic() { 
-  document.getElementById("on").style.color = "orange";
-  document.getElementById("off").style.color = "white";
-  song.volume = 1.0;
-  song.play();
+  track.play();
+  onOff = ref(true);
 } 
   
 function offMusic() { 
-  document.getElementById("off").style.color = "orange";
-  document.getElementById("on").style.color = "white";
-  song.volume = 0;
-  song.pause();
+  track.pause();
+  onOff = ref(false);
 } 
-// window.addEventListener('load', onMusic());
+
 </script>
 
 <template>
@@ -43,10 +56,18 @@ function offMusic() {
         <!-- play music -->
         <div class="flex pr-2 pt-36 justify-center flex-row" >
           <p class="text-2xl pr-3 -top-1.5" >music</p>
-          <audio class="hidden" controls id="song"><source src="../src/song/เสียงม้าร้อง Horse sounds Heigh-heigh.mp3" type="audio/ogg"></audio>
-          <input type="range" min="1" max="100" value="50" id="volumn"/>
-          <p id="on" class="text-2xl pl-5 -top-1.5 cursor-pointer text-orange-400" v-on:click="onMusic()">on</p>
-          <p id="off" class="text-2xl pl-5 -top-1.5 cursor-pointer" v-on:click="offMusic()">off</p>
+          <audio class="hidden" controls id="track"><source src="../src/song/‘Yours’.mp3" type="audio/ogg"></audio>
+
+          <input type="range" min="1" max="100" value="50" id="volume" 
+         />
+
+          <label :class="onOff ? 'text-orange-400' : ' text-white'"
+           class="text-2xl pl-5 -top-1.5 cursor-pointer"  for="on">on</label>
+          <input type="text" class="hidden" id="on" v-on:click="onMusic()"  checked v-model="onOff"/>
+
+          <label :class="onOff ? 'text-white' : ' text-orange-400'"
+           class="text-2xl pl-5 -top-1.5 cursor-pointer" for="off">off</label>
+          <input type="text" class="hidden" id="off" v-on:click="offMusic()" checked v-model="onOff"/>
         </div>
       </div>
       <button id="setting" class="block text-7xl cursor-pointer text-white hover:text-slate-400 float-right right-3 top-3" v-on:click="openNav()"><SystemUiconsSettings /></button>
