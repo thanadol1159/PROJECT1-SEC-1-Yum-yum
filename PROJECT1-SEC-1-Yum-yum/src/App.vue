@@ -179,7 +179,7 @@ function changeVolume() {
         <h1 class="w-full flex justify-center mt-9 font-sans font-extrabold text-9xl tracking-wider text-white">
           BLACKJACK
         </h1>
-        <h4 class="w-full font-sans font-semibold text-3xl flex justify-center text-end mt-64 text-gray-300">
+        <h4 class="w-full font-sans font-semibold text-3xl flex justify-center text-end mt-64 text-gray-300 blink">
           click to start
         </h4>
       </div>
@@ -359,4 +359,17 @@ input[type="range"]::-webkit-slider-thumb {
 .popstatus {
   margin-top: 200px;
 }
+
+.blink{
+  animation: blink 2s infinite;
+}
+
+@keyframes blink{
+  0%{opacity: 0;}
+  25%{opacity: 1;}
+50%{opacity: 0;}
+75%{opacity: 1;}
+100%{opacity: 0;}
+}
+
 </style>
