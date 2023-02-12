@@ -15,8 +15,9 @@ let dealerScorePoint = ref(0);
 let dealercountAce = ref(0);
 let playercountAce = ref(0);
 
+let endGame = ref(true);
 let numRound = ref(1);
-let textWLB = ref();
+let textWLB = ref('');
 // let testA = ["2-S", "3-C", "A-C", "A-D", "2-H", "5-S", "7-H", "2-S", "A-H", "5-D"] //testcase
 let firstCard = [];
 
@@ -66,6 +67,32 @@ function startGame() {
   }
 }
 
+function newGame() {
+    resetEveryThing();
+    startGame();
+    if(deck.length <= 26){
+      deck = []
+      buildDeck()
+      shuffleDeck()
+    }
+    endGame.value = true;
+    if(endGame.value = true){
+    numRound.value++
+  }
+    showHit.value = true
+}
+
+function resetEveryThing(){
+    playerArr = []
+    dealerArr = []
+    firstCard = []
+    playerPoint.value = 0
+    dealerPoint.value = 0
+    textWLB.value = ''
+}
+
+
+
 function getPicture(card) {
   let src = 'img/All-card-final/' + card + '.png';
   // let src = 'testcard/cards/' + card + '.png';
@@ -91,22 +118,27 @@ function hit() {
     textWLB.value = "BUST"
     stay()
   }
+  if(playerPoint.value === 21){
+    showHit.value = false;
+    textWLB.value = "WIN"
+    playerScorePoint.value++
+  }
 }
 
 function stay() {
   showHit.value = false;
-  if (textWLB.value != "BUST" && dealerPoint.value < 17) {
+  if (dealerPoint.value < 17) {
     for (let i = 1; dealerPoint.value < 17; i++) {
-      let cardDealer = deck.shift();
-      dealerArr.push(getPicture(cardDealer));
-      dealerPoint.value += getPoint(cardDealer, dealerPoint, dealercountAce);
+      let dealerDrawCard = deck.shift();
+      dealerArr.push(getPicture(dealerDrawCard));
+      dealerPoint.value += getPoint(dealerDrawCard, dealerPoint, dealercountAce);
       if (dealerPoint.value > 21) {
         dealerPoint.value = "BUST"
         playerScorePoint.value++
       }
     }
   }
-  if (textWLB.value == "BUST") {
+  if (textWLB.value === "BUST") {
     textWLB.value = "BUST"
     dealerScorePoint.value++
   }
@@ -118,9 +150,11 @@ function stay() {
     textWLB.value = "Win"
     playerScorePoint.value++
   }
-  else if (dealerPoint.value == playerPoint.value) {
+  else if (dealerPoint.value === playerPoint.value) {
     textWLB.value = "Tie"
   }
+  console.log(dealerPoint.value)
+  console.log(playerPoint.value)
 }
 </script>
 
@@ -144,7 +178,7 @@ function stay() {
       <!-- Score -->
       <div class="flex justify-center items-center text-stone-900" v-show="!bg_first">
         <div class="relative flex justify-center">
-          <div class="totalScore z-10 relative flex items-center justify-center "><span class="pt-10 "> Round: {{
+          <div class="totalScore z-10 relative flex items-center justify-center"><span class="pt-10 "> Round: {{
             numRound
           }} </span>
           </div>
@@ -155,7 +189,7 @@ function stay() {
               }} </span>
             </span>
           </div>
-          <div class="player absolute m-auto z-20 flex items-center top-0 bx6  justify-around">
+          <div class="player absolute m-auto z-20 flex items-center top-0 bx6 justify-around">
             <div class="flex">PLAYER: {{ playerPoint }}</div>
             <div class="flex w-16"></div>
             <div class="flex">DEALER: <span v-show="!showHit">{{ dealerPoint }}</span></div>
@@ -196,7 +230,7 @@ function stay() {
       <div class="w-full flex justify-center space-x-8 h-8">
         <button type="button" class="px-6 bg-green-500 hover:bg-green-600 active:bg-green-800 text-white 
                font-bold text-lg text-center rounded-lg" @click="hit" :disabled="!showHit"
-          :class="showHit ? 'none' : 'bg-gray-500 hover:bg-gray-500 active:bg-gray-500 cursor-not-allowed'">
+          :class="showHit ? 'none' : 'bg-gray-600 hover:bg-gray-600 active:bg-gray-600 cursor-not-allowed'">
           HIT
         </button>
         <button type="button" class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white 
@@ -204,6 +238,13 @@ function stay() {
           :class="showHit ? 'none' : 'bg-gray-600 hover:bg-gray-600 active:bg-gray-600 cursor-not-allowed'">
           STAY
         </button>
+        <div v-if="!showHit">
+          <button type="button" class="px-6 bg-blue-500 hover:bg-blue-600 active:bg-blue-800 text-white 
+               font-bold text-lg text-center rounded-lg" @click="newGame">
+          New Game
+        </button>
+        </div>
+        
       </div>
 
       <!-- Player -->
