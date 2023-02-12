@@ -6,7 +6,6 @@ import SystemUiconsSettings from "./components/icons/SystemUiconsSettings.vue";
 let bg_first = ref(true);
 const bg_first_func = () => { bg_first.value = false };
 let showHit = ref(true);
-
 // Variable JS
 let deck = [], dealerArr = [], playerArr = [], firstCard = [];
 // Player
@@ -24,7 +23,7 @@ let onOff = ref(1);
 let open = ref(false);
 
 // Testing Case 
-// let testA = ["K-A", "6-C", "10-N", "K-T", "10-C"]
+let testA = ["A-A", "10-C", "K-N", "10-T", "10-C"]
 
 // Window call function
 window.onload = function () {
@@ -52,32 +51,12 @@ function shuffledeck() {
 }
 
 function startGame() {
-  // Dealer FirstCard
-  drawCard(firstCard, dealerPoint, dealercountAce)
-  // Dealer Card
-  drawCard(dealerArr, dealerPoint, dealercountAce)
+  drawCard(firstCard, dealerPoint, dealercountAce) // Hide FirstCard
+  drawCard(dealerArr, dealerPoint, dealercountAce) // Dealer Card
   for (let i = 0; i < 2; i++) {
-    // Player Card
-    drawCard(playerArr, playerPoint, playercountAce)
+    drawCard(playerArr, playerPoint, playercountAce) // Player Card
   }
   checkRule();
-}
-
-function getPicture(card) {
-  let src = "img/All-card-final/" + card + ".png";
-  // let src = 'testcard/cards/' + card + '.png';
-  return src;
-}
-
-function getPoint(card, yourPoint, countAce) {
-  let point = card.split("-")[0]; // "6-T" -> ["6", "T"]
-  point == "A" ? yourPoint.value + 11 > 21 ? (point = 1) : ((point = 11), countAce.value++)
-    : isNaN(point) ? (point = 10) : point;
-  if (countAce.value == 1 && yourPoint.value + parseInt(point) > 21) {
-    countAce.value--;
-    point -= 10;
-  }
-  return parseInt(point);
 }
 
 function hit() {
@@ -104,38 +83,47 @@ function stay() {
         playerScorePoint.value++;
       }
     }
-  }
-  checkRule();
+  } checkRule();
 }
 
-function drawCard(arr, point, countAce) {
-  let card = deck.shift();
-  arr.push(getPicture(card));
-  point.value += getPoint(card, point, countAce);
+function drawCard(arr, yourPoint, countAce) {
+  let codeCard = testA.shift();
+  let srcCard = "img/All-card-final/" + codeCard + ".png"; // getPicture
+  arr.push(srcCard);
+  let point = codeCard.split("-")[0]; // "6-T" >> ["6", "T"] >> 6
+  point === "A" ? yourPoint.value + 11 > 21 ? point = 1 : (point = 11, countAce.value++) : isNaN(point) ? point = 10 : point;
+  if (countAce.value === 1 && yourPoint.value + parseInt(point) > 21) {
+    countAce.value--;
+    point -= 10;
+  }
+  yourPoint.value += parseInt(point)
 }
 
 function checkRule() {
-  if (playerPoint.value === 21 && dealerPoint.value === 21) {
-    showHit.value = false;
-    textWLB.value = "Tie"
+  if (showHit.value === true) {
+    if (playerPoint.value === 21 && dealerPoint.value === 21) {
+      showHit.value = false;
+      textWLB.value = "Tie Black Jack";
+    }
+    else if (playerPoint.value === 21) {
+      showHit.value = false;
+      textWLB.value = "Black Jack";
+      playerScorePoint.value++
+    }
   }
-  else if (playerPoint.value === 21) {
-    showHit.value = false;
-    textWLB.value = "Black Jack"
-    playerScorePoint.value++
-  }
-  else if (textWLB.value !== "Dealer BUST" && showHit.value === false) {
-    if (textWLB.value === "Player BUST") {
-      textWLB.value === "Player BUST"
-      dealerScorePoint.value++;
-    } else if (dealerPoint.value > playerPoint.value) {
-      textWLB.value = "Dealer Win";
-      dealerScorePoint.value++;
-    } else if (dealerPoint.value < playerPoint.value) {
-      textWLB.value = "Player Win";
-      playerScorePoint.value++;
-    } else if (dealerPoint.value === playerPoint.value) {
-      textWLB.value = "Tie";
+  else if (showHit.value === false) {
+    if (textWLB.value !== "Dealer BUST") {
+      if (textWLB.value === "Player BUST") {
+        dealerScorePoint.value++;
+      } else if (dealerPoint.value > playerPoint.value) {
+        textWLB.value = "Dealer Win";
+        dealerScorePoint.value++;
+      } else if (dealerPoint.value < playerPoint.value) {
+        textWLB.value = "Player Win";
+        playerScorePoint.value++;
+      } else {
+        textWLB.value = "Tie";
+      }
     }
   }
 }
