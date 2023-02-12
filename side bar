@@ -6,8 +6,9 @@ import { ref } from 'vue'
 // window.onload() = ( new Audio( require('../src/song/‘Yours’.mp3') )).play();
 
 let onOff = ref(1)
-
 let open = ref(false)
+
+
 
 function MenuOpen(){
   open.value = !open.value
@@ -23,21 +24,12 @@ function offMusic() {
   onOff.value = 0
 } 
 
-const currentVolume = document.querySelector("#volume");
-
 function changeVolume(){
-    song.volume = currentVolume.value / 100;
+  let currentVolume = document.querySelector("#volume");
+  let song = document.querySelector("#song");
+  song.volume = currentVolume.value / 100;
 }
-// changeVolume()
 
-
-// let track = document.querySelector("#song");
-// let audio = document.createElement("audio");
-
-// currentVolume.addEventListener("change",changeVolume);
-// currentVolume.useEventListener(() => {
-//   track.volume = currentVolume.value / 100;
-// })
 </script>
 
 <template>
@@ -64,7 +56,9 @@ function changeVolume(){
           <p class="text-2xl pr-3 -top-1.5" >music</p>
           
         <!-- changeVolume music -->
-          <audio class="hidden" id="song" src="../src/song/‘Yours’.mp3" autoplay loop type="audio/ogg"></audio>
+        <audio class="hidden" autoplay loop id="song">
+            <source v-on:click="changeVolume()" src="../src/song/‘Yours’.mp3"  type="audio/mpeg">
+        </audio>
 
           <input type="range" min="1" max="100" value="50" id="volume" @click="changeVolume()"
          />
@@ -88,4 +82,20 @@ function changeVolume(){
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+input[type="range"]{
+    appearance: none;
+    height: 2px;
+    margin: 10px;
+}
+
+input[type="range"]::-webkit-slider-thumb{ /* ตัวจุดหาย */
+    appearance: none;
+    height: 1rem;
+    width: 1rem;
+    background: #ffc21b;
+    border-radius: 50%;
+    cursor: pointer
+}
+</style>
