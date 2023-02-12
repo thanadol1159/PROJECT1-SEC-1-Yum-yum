@@ -23,7 +23,7 @@ let onOff = ref(1);
 let open = ref(false);
 
 // Testing Case 
-let testA = ["A-A", "10-C", "K-N", "10-T", "10-C"]
+// let testA = ["A-A", "5-C", "K-N", "10-T", "10-C"]
 
 // Window call function
 window.onload = function () {
@@ -79,7 +79,7 @@ function stay() {
     for (let i = 1; dealerPoint.value < 17; i++) {
       drawCard(dealerArr, dealerPoint, dealercountAce)
       if (dealerPoint.value > 21) {
-        textWLB.value = "Dealer BUST";
+        textWLB.value = "Player Win";
         playerScorePoint.value++;
       }
     }
@@ -87,7 +87,7 @@ function stay() {
 }
 
 function drawCard(arr, yourPoint, countAce) {
-  let codeCard = testA.shift();
+  let codeCard = deck.shift();
   let srcCard = "img/All-card-final/" + codeCard + ".png"; // getPicture
   arr.push(srcCard);
   let point = codeCard.split("-")[0]; // "6-T" >> ["6", "T"] >> 6
@@ -112,7 +112,7 @@ function checkRule() {
     }
   }
   else if (showHit.value === false) {
-    if (textWLB.value !== "Dealer BUST") {
+    if (textWLB.value !== "Player Win") {
       if (textWLB.value === "Player BUST") {
         dealerScorePoint.value++;
       } else if (dealerPoint.value > playerPoint.value) {
@@ -262,21 +262,6 @@ function changeVolume() {
           </div>
         </div>
       </div>
-
-      <!-- Btn How to Play -->
-      <!-- <div class="w-full absolute" v-show="!bg_first">
-        <button class="px-3 py-1 mr-12 float-right
-         bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 text-black 
-               font-bold text-lg text-center rounded-lg" @click="how_to_play_func">
-          How to Play
-        </button>
-      </div> -->
-
-      <!-- Text How to play -->
-      <!-- <div class="rule absolute w-2/5 h-4/5 bg-white opacity-90" v-show="how_to_play">
-        <p class="pt-6 text-center text-3xl">อธิบายการเล่น</p>
-      </div> -->
-
       <!-- Dealer -->
       <div class="w-full pt-6">
         <div class="flex justify-center space-x-5" ref="imgCardDealer">
@@ -284,7 +269,7 @@ function changeVolume() {
           <img v-else :src="firstCard" class="w-32" />
           <img v-for="card in dealerArr" :src="card" class="w-32" />
           <!-- popup -->
-          <div v-show="!showHit">
+          <div v-show="!showHit" class="popstatus absolute  border-solid  bg-slate-700 px-24 py-4 text-3xl">
             {{ textWLB }}
           </div>
         </div>
@@ -295,20 +280,12 @@ function changeVolume() {
       <div class="w-full flex justify-center space-x-8 h-8">
         <button type="button"
           class="px-6 bg-green-500 hover:bg-green-600 active:bg-green-800 text-white font-bold text-lg text-center rounded-lg"
-          @click="hit" :disabled="!showHit" :class="
-            showHit
-              ? 'none'
-              : 'bg-gray-500 hover:bg-gray-500 active:bg-gray-500 cursor-not-allowed'
-          ">
+          @click="hit" :disabled="!showHit">
           HIT
         </button>
         <button type="button"
           class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white font-bold text-lg text-center rounded-lg"
-          @click="stay" :disabled="!showHit" :class="
-            showHit
-              ? 'none'
-              : 'bg-gray-500 hover:bg-gray-500 active:bg-gray-500 cursor-not-allowed'
-          ">
+          @click="stay" :disabled="!showHit">
           STAY
         </button>
       </div>
@@ -377,5 +354,9 @@ input[type="range"]::-webkit-slider-thumb {
   background: #ffc21b;
   border-radius: 50%;
   cursor: pointer;
+}
+
+.popstatus {
+  margin-top: 200px;
 }
 </style>
