@@ -7,13 +7,10 @@ import { ref } from 'vue'
 
 let onOff = ref(1)
 
-function openNav() {
-  document.getElementById("slideBar").style.width = "384px";
-  document.getElementById("slideBar").style.display = "block";
-}
+let open = ref(false)
 
-function closeNav() {
-  document.getElementById("slideBar").style.width = "0";
+function MenuOpen(){
+  open.value = !open.value
 }
 
 
@@ -28,6 +25,7 @@ function offMusic() {
 } 
 
 const currentVolume = document.querySelector("#volume");
+
 function changeVolume(){
     song.volume = currentVolume.value / 100;
 }
@@ -47,13 +45,14 @@ function changeVolume(){
   <div id="background" class="bg-[url('../src/assets/img/bg.png')] h-screen bg-cover bg-no-repeat z-0">  
        <!-- navbar -->
     <div class="slide-bar">  
-      <div id="slideBar" class="hidden w-96 fixed text-white z-50 h-screen top-0 right-0 bg-black overflow-hidden float-right ease-in duration-300">
+      <div id="slideBar" class=" w-96 fixed text-white z-50 h-screen top-0 right-0 bg-black overflow-hidden float-right ease-in duration-300"
+      :class="[open ? 'right-0' : 'right-[-100%]  duration-400']">
         <!-- bar -->
         <div>
           <ul>
-           <li class="pb-16 mt-3"><a class="absolute left-5 text-5xl hover:text-slate-400 " href="javascript:void(0)" v-on:click="closeNav()">×</a></li>
+           <li class="pb-16 mt-3"><a class="absolute left-5 text-5xl hover:text-slate-400 " href="javascript:void(0)" @click="MenuOpen()">×</a></li>
            <li><img class="w-24 m-auto" src="../src/assets/img/back_card.png"></li>
-           <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" @click="closeNav()">RESUME</a></li>
+           <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" @click="MenuOpen()">RESUME</a></li>
            <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">RULE</a></li>
            <li><a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400" href="#">QUIT</a></li>
         </ul> 
@@ -75,7 +74,8 @@ function changeVolume(){
           <input type="text" class="hidden" id="off" v-on:click="offMusic()" checked v-model="onOff"/>
         </div>
       </div>
-      <button id="setting" class="block text-7xl cursor-pointer text-white hover:text-slate-400 float-right right-3 top-3" v-on:click="openNav()"><SystemUiconsSettings /></button>
+      <button id="setting" class="block text-7xl cursor-pointer text-white hover:text-slate-400 float-right right-3 top-3" 
+      @click="MenuOpen()"><SystemUiconsSettings /></button>
     </div>
     
   </div>
