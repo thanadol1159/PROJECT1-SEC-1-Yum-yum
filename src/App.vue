@@ -5,7 +5,8 @@ import settingIcon from "./components/icons/SystemUiconsSettings.vue";
 //variable HTML
 let bg_blur = ref(true);
 const close_BG = () => {
-  bg_blur.value = false
+  bg_blur.value = false;
+  bgMusic.play();
 };
 let showHit = ref(true);
 
@@ -69,19 +70,22 @@ function startGame() {
 
 // hit button and draw cards
 function hit() {
-  if (playerArr.length <= 5) {
-    drawCard(playerArr, playerPoint, playerCountAce);
-  }
-  if (playerPoint.value === 21) {
-    showHit.value = false;
-    textPopup.value = "Black Jack";
-    playerScore.value++
-  }
-  else if (playerPoint.value > 21) {
-    showHit.value = false;
-    textPopup.value = "Player BUST";
-    stay();
-  }
+  setTimeout(() => {
+    soundDrawCard.play();
+    if (playerArr.length <= 5 && playerPoint.value < 21) {
+      drawCard(playerArr, playerPoint, playerCountAce);
+    }
+    if (playerPoint.value === 21) {
+      showHit.value = false;
+      textPopup.value = "Black Jack";
+      playerScore.value++
+    }
+    else if (playerPoint.value > 21) {
+      showHit.value = false;
+      textPopup.value = "Player BUST";
+      stay();
+    }
+  }, 200)
 }
 
 // stop draw 
@@ -91,6 +95,7 @@ function stay() {
     while (dealerPoint.value < 17 && dealerArr.length <= 4) {
       drawCard(dealerArr, dealerPoint, dealerCountAce)
     } if (dealerPoint.value > 21) {
+      soundWin.play()
       textPopup.value = "Win";
       playerScore.value++;
     }
@@ -115,10 +120,12 @@ function drawCard(arr, yourPoint, countAce) {
 function showTextPopup() {
   if (showHit.value === true) {
     if (playerPoint.value === 21 && dealerPoint.value === 21) {
+      soundLose.play()
       showHit.value = false;
       textPopup.value = "Tie Black Jack";
     }
     else if (playerPoint.value === 21) {
+      soundWin.play()
       showHit.value = false;
       textPopup.value = "Black Jack";
       playerScore.value++
@@ -127,14 +134,18 @@ function showTextPopup() {
   else if (showHit.value === false) {
     if (textPopup.value !== "Win") {
       if (textPopup.value === "Player BUST") {
+        soundLose.play()
         dealerScore.value++;
       } else if (dealerPoint.value > playerPoint.value) {
+        soundLose.play()
         textPopup.value = "Lose";
         dealerScore.value++;
       } else if (dealerPoint.value < playerPoint.value) {
+        soundWin.play()
         textPopup.value = "Win";
         playerScore.value++;
       } else {
+        soundLose.play()
         textPopup.value = "Tie";
       }
     }
@@ -143,25 +154,32 @@ function showTextPopup() {
 
 // new game
 function newGame() {
-  showHit.value = true;
-  numRound.value++;
-  resetEveryThing();
-  startGame();
   if (deck.length <= 26) {
-    deck = [];
-    buildDeck();
-    shuffleDeck();
+    soundSuffle.play();
+    setTimeout(() => {
+      deck = [];
+      buildDeck();
+      shuffleDeck();
+      resetEveryThing();
+    }, 4500);
+  } else {
+    setTimeout(() => {
+      resetEveryThing();
+    }, 1000)
   }
 }
 
 // reset game
 function resetEveryThing() {
+  showHit.value = true;
+  numRound.value++;
   playerArr = [];
   dealerArr = [];
   firstCard = [];
   playerPoint.value = 0;
   dealerPoint.value = 0;
   textPopup.value = "";
+  startGame();
 }
 
 // setting menu
@@ -169,21 +187,17 @@ function MenuOpen() {
   openSetting.value = !openSetting.value;
 }
 
-// music
-const music = ref('bg_music.mp3')
-const isPlaying = ref(false)
-const inputMusic = ref(null)
-const playPauseSong = () => {
-  isPlaying.value = !isPlaying.value    
-  onOff.value = !onOff.value
-  if (isPlaying.value) {
-    inputMusic.value.play()
-  }
-  else {
-    inputMusic.value.pause()
-  }
-}
+// Music
+const bgMusic = new Audio('bg_music.mp3')
+const soundDrawCard = new Audio('drawcard.mp3')
+const soundWin = new Audio('win.mp3')
+const soundLose = new Audio('lose.mp3')
+const soundSuffle = new Audio('shuffle.mp3')
 
+// Music Funtion
+const playPauseSong = () => {
+  onOff.value = !onOff.value
+}
 
 const quit = () => {
   bg_blur.value = true
@@ -249,11 +263,14 @@ const quit = () => {
           <div class="flex pr-2 pt-36 justify-center flex-row">
             <p class="text-4xl pr-3 -top-1.5 max-md:text-2xl max-md:top-1.5">music :</p>
 
-            <audio ref="inputMusic" :src="music" id="startMusic"></audio>
+            <!-- <audio ref="inputMusic" :src="music" id="startMusic" autoplay loop></audio> -->
 
             <!-- stop start music -->
             <button class="text-4xl pl-5 -top-1.5 cursor-pointer max-md:text-xl max-md:mt-1"
-              :class="onOff ? 'text-orange-400' : ' text-white'" @click="playPauseSong">{{ onOff? 'On':'Off' }}</button>
+              :class="onOff ? ['text-orange-400', bgMusic.play()] : ['text-white', bgMusic.pause()]"
+              @click="playPauseSong">
+              {{ onOff ? 'On' : 'Off' }}
+            </button>
 
           </div>
         </div>
@@ -286,12 +303,16 @@ const quit = () => {
 
             <h3 class="py-2 text-xl font-bold text-amber-600">อธิบายการเล่น</h3>
             <ol class="list-disc px-4 text-sm">
-              <li> <span class="text-green-500">HIT</span> เป็นการขอไพ่เพิ่มจากทาง <span class="red">Dealer</span> โดยจะนับแต้มไพ่ที่เพิ่มเข้ามาปกติ โดยเราต้องระวังไม่ให้แต้มเราเกิน
+              <li> <span class="text-green-500">HIT</span> เป็นการขอไพ่เพิ่มจากทาง <span class="red">Dealer</span>
+                โดยจะนับแต้มไพ่ที่เพิ่มเข้ามาปกติ โดยเราต้องระวังไม่ให้แต้มเราเกิน
                 21 ไม่งั้นจะเป็นการ BUST หรือแต้มเสียและทันที
               </li>
-              <li><span class="text-red-500">STAY</span> เหมือนการกดยืนยันไพ่เพื่อวัดผลแพ้ชนะกับ <span class="red">Dealer</span> โดย <span class="red">Dealer</span>
-                จะเริ่มจั่วไพ่ของตนเองถ้าหากจนเองแต้มน้อยกว่า 17 แต่ถ้า <span class="red">Dealer</span> มีแต้มที่ 17-21 <span class="red">Dealer</span>
-                จะไม่มีการจั่วไพ่เพิ่ม</li>
+              <li><span class="text-red-500">STAY</span> เหมือนการกดยืนยันไพ่เพื่อวัดผลแพ้ชนะกับ <span
+                  class="red">Dealer</span> โดย <span class="red">Dealer</span>
+                จะเริ่มจั่วไพ่ของตนเองถ้าหากจนเองแต้มน้อยกว่า 17 แต่ถ้า <span class="red">Dealer</span> มีแต้มที่ 17-21
+                <span class="red">Dealer</span>
+                จะไม่มีการจั่วไพ่เพิ่ม
+              </li>
             </ol>
 
             <h3 class="py-2 text-xl font-bold text-amber-600">การนับแต้ม</h3>
@@ -315,7 +336,7 @@ const quit = () => {
       <div class="flex justify-center items-center text-stone-900" v-show="!bg_blur">
         <div class="relative flex justify-center ">
           <div class="totalScore z-10 relative flex items-center justify-center ">
-            <span class="pt-8 text-lg max-md:text-sm"> Round: {{ numRound }} </span>
+            <spashowHitn class="pt-8 text-lg max-md:text-sm"> Round: {{ numRound }} </spashowHitn>
           </div>
           <div class="absolute top-0 m-auto z-30 round">
             <span class="compare flex justify-center items-center w-60 text-2xl font-bold ">
@@ -339,7 +360,7 @@ const quit = () => {
           <img v-else :src="firstCard" class="w-32" />
           <img v-for="card in dealerArr" :src="card" class="w-32" />
           <!-- popup -->
-          <div v-show="!showHit" class="popStatus absolute border-solid bg-slate-700 px-24 py-4 text-3xl">
+          <div v-show="!showHit && !bg_blur" class="popStatus absolute border-solid bg-slate-700 px-24 py-4 text-3xl">
             {{ textPopup }}
           </div>
         </div>
@@ -350,12 +371,13 @@ const quit = () => {
       <div class="w-full flex justify-center space-x-8 h-8">
         <button type="button"
           class="px-6 bg-green-500 hover:bg-green-600 active:bg-green-800 text-white font-bold text-lg text-center rounded-lg"
-          @click="hit" :disabled="!showHit">
+          @mouseup="hit" :disabled="!showHit">
           HIT
         </button>
+
         <button type="button"
           class="px-6 bg-red-500 hover:bg-red-600 active:bg-red-800 text-white font-bold text-lg text-center rounded-lg"
-          @click="stay" :disabled="!showHit">
+          @mouseup="stay" :disabled="!showHit">
           STAY
         </button>
       </div>
@@ -482,4 +504,5 @@ input[type="range"]::-webkit-slider-thumb {
   100% {
     opacity: 0;
   }
-}</style>
+}
+</style>
