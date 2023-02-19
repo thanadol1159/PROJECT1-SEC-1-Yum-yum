@@ -22,7 +22,7 @@ let dealerScore = ref(0);
 // Game
 let numRound = ref(1);
 let textPopup = ref("");
-let musicOnOff = ref(1);
+let onOff = ref(true);
 let openSetting = ref(false);
 
 // Testing Case 
@@ -170,21 +170,22 @@ function MenuOpen() {
 }
 
 // music
-function onMusic() {
-  song.play();
-  musicOnOff.value = 1;
-}
-function offMusic() {
-  song.pause();
-  musicOnOff.value = 0;
-}
-function changeVolume() {
-  let currentVolume = document.querySelector("#volume");
-  let song = document.querySelector("#song");
-  song.volume = currentVolume.value / 100;
+const music = ref('bg_music.mp3')
+const isPlaying = ref(false)
+const inputMusic = ref(null)
+const playPauseSong = () => {
+  isPlaying.value = !isPlaying.value    
+  onOff.value = !onOff.value
+  if (isPlaying.value) {
+    inputMusic.value.play()
+  }
+  else {
+    inputMusic.value.pause()
+  }
 }
 
-const quit=()=> {
+
+const quit = () => {
   bg_blur.value = true
   openSetting.value = false
   showHit.value = true
@@ -202,104 +203,98 @@ const quit=()=> {
       <!-- BG start game -->
       <label class="absolute w-screen h-screen bg-bottom bg-cover bg-no-repeat bg-[url('img/bg-blur.jpg')]"
         @click="close_BG" v-show="bg_blur" for="my-modal-4">
-        <h1 class="w-full flex justify-center mt-9 font-sans font-extrabold text-9xl tracking-wider text-white">
+        <h1
+          class="w-full flex justify-center mt-9 font-sans font-extrabold text-9xl tracking-wider text-white max-md:text-6xl">
           BLACKJACK
         </h1>
-        <h4 class="w-full font-sans font-semibold text-3xl flex justify-center text-end mt-64 text-gray-300 blink">
+        <h4
+          class="w-full font-sans font-semibold text-3xl flex justify-center text-end mt-64 text-gray-300 blink max-md:text-2xl">
           click to start
         </h4>
       </label>
 
       <!-- navbar -->
-      <div class="slide-bar">
-        <div id="slideBar"
-          class="w-96 fixed text-white h-screen z-50 top-0 right-0 bg-black overflow-hidden float-right ease-in duration-300"
+      <div>
+        <div
+          class="w-96 fixed text-white h-screen z-50 top-0 right-0 bg-black overflow-hidden float-right ease-in duration-300 max-md:w-64"
           :class="[openSetting ? 'right-0' : 'right-[-100%]']">
           <!-- bar -->
           <div>
-              <ul>
-                <!--link bar -->
-                <li class="pb-16 mt-3">
-                  <a class="absolute left-5 text-5xl hover:text-slate-400" href="javascript:void(0)"
-                    @click="MenuOpen()">×</a>
-                </li>
-                <li>
-                  <img class="w-24 m-auto" src="../src/assets/img/back_card.png" />
-                </li>
-                <li>
-                  <a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400 cursor-pointer"
-                    @click="MenuOpen()">RESUME</a>
-                </li>
-                <li>
-                  <label class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400 cursor-pointer" for="my-modal-4" >RULE</label>
-                </li>
-                <li>
-                  <a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400 cur" @click="quit">QUIT</a>
-                </li>
-              </ul>
-            </div>
+            <ul>
+              <!--link bar -->
+              <li class="pb-16 mt-3">
+                <a class="absolute left-5 text-5xl hover:text-slate-400" href="javascript:void(0)"
+                  @click="MenuOpen()">×</a>
+              </li>
+              <li>
+                <img class="w-24 m-auto" src="../src/assets/img/back_card.png" />
+              </li>
+              <li>
+                <a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400 cursor-pointer  max-md:text-3xl"
+                  @click="MenuOpen()">RESUME</a>
+              </li>
+              <li>
+                <label
+                  class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400 cursor-pointer max-md:text-3xl"
+                  for="my-modal-4">RULE</label>
+              </li>
+              <li>
+                <a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400 cursor-pointer max-md:text-3xl"
+                  @click="quit">QUIT</a>
+              </li>
+            </ul>
+          </div>
 
           <!-- play music -->
           <div class="flex pr-2 pt-36 justify-center flex-row">
-            <p class="text-2xl pr-3 -top-1.5">music</p>
+            <p class="text-4xl pr-3 -top-1.5 max-md:text-2xl max-md:top-1.5">music :</p>
 
-            <!-- changeVolume music -->
-            <audio class="hidden" autoplay loop id="song">
-              <source v-on:click="changeVolume()" src="../src/song/‘Yours’.mp3" type="audio/mpeg" />
-            </audio>
-
-            <input type="range" min="1" max="100" value="50" id="volume" @click="changeVolume()" />
+            <audio ref="inputMusic" :src="music" id="startMusic"></audio>
 
             <!-- stop start music -->
-            <label :class="musicOnOff === 1 ? 'text-orange-400' : ' text-white'"
-              class="text-2xl pl-5 -top-1.5 cursor-pointer" for="on">on</label>
-            <input type="text" class="hidden" id="on" v-on:click="onMusic()" checked v-model="musicOnOff" />
+            <button class="text-4xl pl-5 -top-1.5 cursor-pointer max-md:text-xl max-md:mt-1"
+              :class="onOff ? 'text-orange-400' : ' text-white'" @click="playPauseSong">{{ onOff? 'On':'Off' }}</button>
 
-            <label :class="musicOnOff === 0 ? 'text-orange-400' : ' text-white'"
-              class="text-2xl pl-5 -top-1.5 cursor-pointer" for="off">off</label>
-            <input type="text" class="hidden" id="off" v-on:click="offMusic()" checked v-model="musicOnOff" />
           </div>
         </div>
 
         <!-- close bar -->
         <button id="setting"
-          class="absolute block text-7xl cursor-pointer text-white hover:text-slate-400 float-right right-3 top-3"
+          class="absolute block text-7xl cursor-pointer text-white hover:text-slate-400 float-right right-3 top-3 max-md:text-6xl max-md:mt-5"
           @click="MenuOpen()">
           <settingIcon />
         </button>
       </div>
+
       <!-- Rule -->
       <div>
         <!-- button text to open -->
-
         <input type="checkbox" id="my-modal-4" class="modal-toggle" />
         <label for="my-modal-4" class="modal cursor-pointer">
-          <label class="modal-box relative mt-5 text-white opacity-95">
+          <label class="modal-box relative mt-5 text-white opacity-95 bg-stone-900">
             <h1 class="text-3xl text-center font-bold">Rule</h1>
             <h3 class="py-2 text-xl font-bold text-amber-600">กฎการเล่น BlackJack</h3>
             <p class="py-2 text-sm">เกมนี้คือเกม <span class="text-rose-600 font-bold">BlackJack</span> หรือ 21
-              เป้าหมายของเราในการเล่น คือ ผู้เล่น <span class="text-emerald-600 font-bold">(Player)</span> เอาชนะเจ้ามือ
-              <span class="text-rose-600 font-bold">(Dealer)</span>
-              การเล่นคือ <span class="text-rose-600 font-bold">Dealer</span> จะจั่วไพ่ให้คนละ 2 ใบ โดยที่ไพ่ของ <span
-                class="text-lime-600 font-bold">Player</span> จะหงายทั้ง 2 ใบ แต่ <span
-                class="text-rose-600 font-bold">Dealer</span>
-              จะคว่ำไพ่ตัวเองลง 1 ใบ เกมนี้เล่นกับจิตวิทยา จะชนะ <span class="text-rose-600 font-bold">Dealer</span>
-              ได้ต้องแต้มให้เยอะกว่า หรือ ลุ้นให้ <span class="text-rose-600 font-bold">Dealer</span>
+              เป้าหมายของเราในการเล่น คือ ผู้เล่น <span class="green"> (Player)</span> เอาชนะเจ้ามือ <span
+                class="red">(Dealer) </span>
+              การเล่นคือ <span class="red"> Dealer</span> จะจั่วไพ่ให้คนละ 2 ใบ โดยที่ไพ่ของ <span class="green">Player
+              </span> จะหงายทั้ง 2 ใบ แต่
+              <span class="red"> Dealer</span> จะคว่ำไพ่ตัวเองลง 1 ใบ เกมนี้เล่นกับจิตวิทยา จะชนะ <span
+                class="red">Dealer</span> ได้ต้องแต้มให้เยอะกว่า หรือ ลุ้นให้ <span class="red">Dealer</span>
               แต้มเกิน 21
             </p>
 
-            <h3 class="py-2 text-xl font-bold">อธิบายการเล่น</h3>
+            <h3 class="py-2 text-xl font-bold text-amber-600">อธิบายการเล่น</h3>
             <ol class="list-disc px-4 text-sm">
-              <li> HIT เป็นการขอไพ่เพิ่มจากทาง Dealer โดยจะนับแต้มไพ่ที่เพิ่มเข้ามาปกติ
-                โดยเราต้องระวังไม่ให้แต้มเราเกิน
+              <li> <span class="text-green-500">HIT</span> เป็นการขอไพ่เพิ่มจากทาง <span class="red">Dealer</span> โดยจะนับแต้มไพ่ที่เพิ่มเข้ามาปกติ โดยเราต้องระวังไม่ให้แต้มเราเกิน
                 21 ไม่งั้นจะเป็นการ BUST หรือแต้มเสียและทันที
               </li>
-              <li>STAY เหมือนการกดยืนยันไพ่เพื่อวัดผลแพ้ชนะกับ Dealer โดย Dealer
-                จะเริ่มจั่วไพ่ของตนเองถ้าหากจนเองแต้มน้อยกว่า 17 แต่ถ้า Dealer มีแต้มที่ 17-21 Dealer
+              <li><span class="text-red-500">STAY</span> เหมือนการกดยืนยันไพ่เพื่อวัดผลแพ้ชนะกับ <span class="red">Dealer</span> โดย <span class="red">Dealer</span>
+                จะเริ่มจั่วไพ่ของตนเองถ้าหากจนเองแต้มน้อยกว่า 17 แต่ถ้า <span class="red">Dealer</span> มีแต้มที่ 17-21 <span class="red">Dealer</span>
                 จะไม่มีการจั่วไพ่เพิ่ม</li>
             </ol>
 
-            <h3 class="py-2 text-xl font-bold">การนับแต้ม</h3>
+            <h3 class="py-2 text-xl font-bold text-amber-600">การนับแต้ม</h3>
             <ol class="list-disc px-4 text-sm">
               <li>ไพ่เลข ตั้งแต่ 2-10 แต้มจะนับตามเลข</li>
               <li>ไพ่หน้าคน J, Q, K จะนับ 10 แต้มเท่ากันหมด</li>
@@ -309,7 +304,7 @@ const quit=()=> {
               </li>
             </ol>
 
-            <h3 class="py-2 text-xl font-bold">การดำเนินเกม</h3>
+            <h3 class="py-2 text-xl font-bold text-amber-600">การดำเนินเกม</h3>
             <p class="py-2 text-sm">วางเดิมพัน -> เจ้ามือแจกไพ่ -> ผู้เล่นเล่นไพ่ในมือ -> เจ้ามือเล่นไพ่ในมือ ->
               วัดผลการเดิมพัน</p>
           </label>
@@ -318,20 +313,20 @@ const quit=()=> {
 
       <!-- Score -->
       <div class="flex justify-center items-center text-stone-900" v-show="!bg_blur">
-        <div class="relative flex justify-center">
-          <div class="totalScore z-10 relative flex items-center justify-center">
-            <span class="pt-10"> Round: {{ numRound }} </span>
+        <div class="relative flex justify-center ">
+          <div class="totalScore z-10 relative flex items-center justify-center ">
+            <span class="pt-8 text-lg max-md:text-sm"> Round: {{ numRound }} </span>
           </div>
           <div class="absolute top-0 m-auto z-30 round">
-            <span class="compare flex justify-center items-center w-60 text-2xl font-bold">
+            <span class="compare flex justify-center items-center w-60 text-2xl font-bold ">
               <span class="text-teal-300 mr-4">{{ playerScore }}</span> -
               <span class="text-rose-600 ml-4">{{ dealerScore }} </span>
             </span>
           </div>
           <div class="player absolute m-auto z-20 flex items-center top-0 bx6 justify-around">
-            <div class="flex">PLAYER: {{ playerPoint }}</div>
+            <div class="flex text-xl max-md:text-base">PLAYER: {{ playerPoint }}</div>s
             <div class="flex w-16"></div>
-            <div class="flex">
+            <div class="flex text-xl max-md:text-base">
               DEALER: <span v-show="!showHit">{{ dealerPoint }}</span>
             </div>
           </div>
@@ -344,7 +339,7 @@ const quit=()=> {
           <img v-else :src="firstCard" class="w-32" />
           <img v-for="card in dealerArr" :src="card" class="w-32" />
           <!-- popup -->
-          <div v-show="!showHit" class="popstatus absolute border-solid bg-slate-700 px-24 py-4 text-3xl">
+          <div v-show="!showHit" class="popStatus absolute border-solid bg-slate-700 px-24 py-4 text-3xl">
             {{ textPopup }}
           </div>
         </div>
@@ -403,12 +398,30 @@ const quit=()=> {
   border-bottom-right-radius: 50px;
 }
 
+
 .player {
   width: 600px;
   height: 40px;
   background: linear-gradient(120deg, #19f0b0, #0fee98);
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
+}
+
+@media screen and (max-width:60rem) {
+  .player {
+    width: 500px;
+    height: 30px;
+  }
+
+  .totalScore {
+    width: 175px;
+    height: 55px;
+  }
+
+  .compare {
+    width: 200px;
+    height: 30px;
+  }
 }
 
 .round {
@@ -433,8 +446,16 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
 }
 
-.popstatus {
+.popStatus {
   margin-top: 200px;
+}
+
+.red {
+  color: rgb(211, 34, 34)
+}
+
+.green {
+  color: rgb(39, 211, 39);
 }
 
 .blink {
@@ -461,5 +482,4 @@ input[type="range"]::-webkit-slider-thumb {
   100% {
     opacity: 0;
   }
-}
-</style>
+}</style>
