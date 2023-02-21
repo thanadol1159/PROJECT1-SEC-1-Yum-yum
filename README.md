@@ -14,7 +14,7 @@ BlackJack หรือเกม 21 เกมไพ่ที่เก่าแก
 | นายธนชาติ บุญฤทธิวรรณ | 64130500029 | Background , CSS,  Function : newGame , drawCard, ช่วยเสริมfunction อื่นๆ ให้สมบูรณ์  | 20% |
 | นายธนาดล แสงสว่าง | 64130500035 | ดูแลเรื่องการทำ UI , Responsive เป็นหลัก , เขียนฟังก์ชั่น | 20% | 
 | นายพิชญะ จันทรศรีวงศ์ | 64130500059 | ออกเเบบ UI App , ทำรูปการ์ด , navbar , responsive | 20% |
-| นายภคพล ทาอุบล | 64130500062 | Function เกี่ยวกับการเล่น BlackJack | 20% |
+| นายภคพล ทาอุบล | 64130500062 | Function เกี่ยวกับการเล่น BlackJack BuilDeck , ShuffleDeck , Hit , Stay | 20% |
 
 ## คู่มือการใช้งาน
 **กฎการเล่น BlackJack**
@@ -40,9 +40,13 @@ BlackJack หรือเกม 21 เกมไพ่ที่เก่าแก
 
 ## อ้างอิง
 Card : www.unsplash.com <br/>
-Icon : www.pixabay.com <br/>
-Font : www.dafont.com <br/>
-Music : www.pixabay.com <br/>
+Web Icon : https://pixabay.com/th/vectors/%e0%b8%81%e0%b8%b2%e0%b8%a3%e0%b9%80%e0%b8%a5%e0%b9%88%e0%b8%99%e0%b9%84%e0%b8%9e%e0%b9%88-%e0%b8%81%e0%b8%b2%e0%b8%a3%e0%b9%8c%e0%b8%94-%e0%b8%a1%e0%b8%b2%e0%b8%a2%e0%b8%b2%e0%b8%81%e0%b8%a5-%e0%b9%82%e0%b8%9b%e0%b9%8a%e0%b8%81%e0%b9%80%e0%b8%81%e0%b8%ad%e0%b8%a3%e0%b9%8c-2886284/
+ <br/>
+Setting Icon : https://icones.js.org/collection/system-uicons?s=setting
+ <br/>
+Font : https://www.dafont.com/carnivalee-freakshow.font?text=Blackjack
+ <br/>
+Music : https://pixabay.com/th/music/search/casino/ <br/>
 
 ## Features
 - buildDeck สร้าง deck ไพ่
