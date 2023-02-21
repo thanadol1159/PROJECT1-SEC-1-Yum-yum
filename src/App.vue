@@ -5,7 +5,8 @@ import settingIcon from "./components/icons/SystemUiconsSettings.vue";
 //variable HTML
 let bg_blur = ref(true);
 const close_BG = () => {
-  bg_blur.value = false
+  bg_blur.value = false;
+  onOff.value = true
 };
 let showHit = ref(true);
 
@@ -22,11 +23,7 @@ let dealerScore = ref(0);
 // Game
 let numRound = ref(1);
 let textPopup = ref("");
-let onOff = ref(true);
 let openSetting = ref(false);
-
-// Testing Case 
-// let testA = ["2-A", "2-C", "2-A", "2-C", "2-A", "2-C", "2-A", "2-C", "3-C", "3-A"]
 
 // Window call function
 window.onload = function () {
@@ -39,7 +36,6 @@ window.onload = function () {
 function buildDeck() {
   let points = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K",];
   let types = ["A", "C", "N", "T"];
-  // let types = ["C", "D", "H", "S"];
   for (const type of types) {
     for (const point of points) {
       deck.push(point + "-" + type); // A-A , 2-A , ... , K-T
@@ -69,7 +65,7 @@ function startGame() {
 
 // hit button and draw cards
 function hit() {
-  if (playerArr.length <= 5) {
+  if (playerArr.length <= 5 && playerPoint.value < 21) {
     drawCard(playerArr, playerPoint, playerCountAce);
   }
   if (playerPoint.value === 21) {
@@ -170,18 +166,10 @@ function MenuOpen() {
 }
 
 // music
-const music = ref('bg_music.mp3')
-const isPlaying = ref(false)
-const inputMusic = ref(null)
+let onOff = ref(true);
+const music = new Audio('/music/bg_music.mp3')
 const playPauseSong = () => {
-  isPlaying.value = !isPlaying.value    
   onOff.value = !onOff.value
-  if (isPlaying.value) {
-    inputMusic.value.play()
-  }
-  else {
-    inputMusic.value.pause()
-  }
 }
 
 
@@ -193,13 +181,15 @@ const quit = () => {
   numRound.value = 0
   playerScore.value = 0
   dealerScore.value = 0
+
+  onOff.value = false
 }
 </script>
 
 <template>
   <div class="w-screen h-screen">
     <!-- BG main -->
-    <div class="bg-bottom bg-cover bg-no-repeat w-full h-full bg-[url('img/bg-fix-fix.png')]">
+    <div class="bg-bottom bg-cover bg-no-repeat w-full h-full bg-[url('img/background.png')]">
       <!-- BG start game -->
       <label class="absolute w-screen h-screen bg-bottom bg-cover bg-no-repeat bg-[url('img/bg-blur.jpg')]"
         @click="close_BG" v-show="bg_blur" for="my-modal-4">
@@ -223,15 +213,14 @@ const quit = () => {
             <ul>
               <!--link bar -->
               <li class="pb-16 mt-3">
-                <a class="absolute left-5 text-5xl hover:text-slate-400" href="javascript:void(0)"
-                  @click="MenuOpen()">×</a>
+                <a class="absolute left-5 text-5xl hover:text-slate-400" href="javascript:void(0)" @click="MenuOpen">×</a>
               </li>
               <li>
                 <img class="w-24 m-auto" src="../src/assets/img/back_card.png" />
               </li>
               <li>
                 <a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400 cursor-pointer  max-md:text-3xl"
-                  @click="MenuOpen()">RESUME</a>
+                  @click="MenuOpen">RESUME</a>
               </li>
               <li>
                 <label
@@ -248,20 +237,18 @@ const quit = () => {
           <!-- play music -->
           <div class="flex pr-2 pt-36 justify-center flex-row">
             <p class="text-4xl pr-3 -top-1.5 max-md:text-2xl max-md:top-1.5">music :</p>
-
-            <audio ref="inputMusic" :src="music" id="startMusic"></audio>
-
             <!-- stop start music -->
             <button class="text-4xl pl-5 -top-1.5 cursor-pointer max-md:text-xl max-md:mt-1"
-              :class="onOff ? 'text-orange-400' : ' text-white'" @click="playPauseSong">{{ onOff? 'On':'Off' }}</button>
-
+              :class="onOff ? ['text-orange-400', music.play()] : [' text-white', music.pause()]"
+              @click="playPauseSong">{{ onOff ? 'On' : 'Off'
+              }}</button>
           </div>
         </div>
 
         <!-- close bar -->
         <button id="setting"
           class="absolute block text-7xl cursor-pointer text-white hover:text-slate-400 float-right right-3 top-3 max-md:text-6xl max-md:mt-5"
-          @click="MenuOpen()">
+          @click="MenuOpen">
           <settingIcon />
         </button>
       </div>
@@ -286,12 +273,16 @@ const quit = () => {
 
             <h3 class="py-2 text-xl font-bold text-amber-600">อธิบายการเล่น</h3>
             <ol class="list-disc px-4 text-sm">
-              <li> <span class="text-green-500">HIT</span> เป็นการขอไพ่เพิ่มจากทาง <span class="red">Dealer</span> โดยจะนับแต้มไพ่ที่เพิ่มเข้ามาปกติ โดยเราต้องระวังไม่ให้แต้มเราเกิน
+              <li> <span class="text-green-500">HIT</span> เป็นการขอไพ่เพิ่มจากทาง <span class="red">Dealer</span>
+                โดยจะนับแต้มไพ่ที่เพิ่มเข้ามาปกติ โดยเราต้องระวังไม่ให้แต้มเราเกิน
                 21 ไม่งั้นจะเป็นการ BUST หรือแต้มเสียและทันที
               </li>
-              <li><span class="text-red-500">STAY</span> เหมือนการกดยืนยันไพ่เพื่อวัดผลแพ้ชนะกับ <span class="red">Dealer</span> โดย <span class="red">Dealer</span>
-                จะเริ่มจั่วไพ่ของตนเองถ้าหากจนเองแต้มน้อยกว่า 17 แต่ถ้า <span class="red">Dealer</span> มีแต้มที่ 17-21 <span class="red">Dealer</span>
-                จะไม่มีการจั่วไพ่เพิ่ม</li>
+              <li><span class="text-red-500">STAY</span> เหมือนการกดยืนยันไพ่เพื่อวัดผลแพ้ชนะกับ <span
+                  class="red">Dealer</span> โดย <span class="red">Dealer</span>
+                จะเริ่มจั่วไพ่ของตนเองถ้าหากจนเองแต้มน้อยกว่า 17 แต่ถ้า <span class="red">Dealer</span> มีแต้มที่ 17-21
+                <span class="red">Dealer</span>
+                จะไม่มีการจั่วไพ่เพิ่ม
+              </li>
             </ol>
 
             <h3 class="py-2 text-xl font-bold text-amber-600">การนับแต้ม</h3>
@@ -339,7 +330,7 @@ const quit = () => {
           <img v-else :src="firstCard" class="w-32" />
           <img v-for="card in dealerArr" :src="card" class="w-32" />
           <!-- popup -->
-          <div v-show="!showHit" class="popStatus absolute border-solid bg-slate-700 px-24 py-4 text-3xl">
+          <div v-show="!showHit && !bg_blur" class="popStatus absolute border-solid bg-slate-700 px-24 py-4 text-3xl">
             {{ textPopup }}
           </div>
         </div>
@@ -430,22 +421,6 @@ const quit = () => {
   border-bottom-right-radius: 25px;
 }
 
-input[type="range"] {
-  appearance: none;
-  height: 2px;
-  margin: 10px;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  /* ตัวจุดหาย */
-  appearance: none;
-  height: 1rem;
-  width: 1rem;
-  background: #ffc21b;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
 .popStatus {
   margin-top: 200px;
 }
@@ -482,4 +457,5 @@ input[type="range"]::-webkit-slider-thumb {
   100% {
     opacity: 0;
   }
-}</style>
+}
+</style>

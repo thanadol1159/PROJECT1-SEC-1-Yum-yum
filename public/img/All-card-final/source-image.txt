@@ -58,13 +58,12 @@ Technology J : https://unsplash.com/photos/p0j-mE6mGo4
 Technology K : https://unsplash.com/photos/dIMJWLx1YbE
 Technology Q : https://unsplash.com/photos/KW3m50XRhjk
 
+icon 
+web icon : https://pixabay.com/th/vectors/%e0%b8%81%e0%b8%b2%e0%b8%a3%e0%b9%80%e0%b8%a5%e0%b9%88%e0%b8%99%e0%b9%84%e0%b8%9e%e0%b9%88-%e0%b8%81%e0%b8%b2%e0%b8%a3%e0%b9%8c%e0%b8%94-%e0%b8%a1%e0%b8%b2%e0%b8%a2%e0%b8%b2%e0%b8%81%e0%b8%a5-%e0%b9%82%e0%b8%9b%e0%b9%8a%e0%b8%81%e0%b9%80%e0%b8%81%e0%b8%ad%e0%b8%a3%e0%b9%8c-2886284/
+setting icon : https://icones.js.org/collection/system-uicons?s=setting
 
+font :
+https://www.dafont.com/carnivalee-freakshow.font?text=Blackjack
 
-
-
-
-
-
-
-
-
+music :
+https://pixabay.com/th/music/search/casino/
