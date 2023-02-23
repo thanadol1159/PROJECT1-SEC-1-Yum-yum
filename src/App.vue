@@ -279,7 +279,7 @@ const quit = () => {
               </li>
               <li><span class="text-red-500">STAY</span> เหมือนการกดยืนยันไพ่เพื่อวัดผลแพ้ชนะกับ <span
                   class="red">Dealer</span> โดย <span class="red">Dealer</span>
-                จะเริ่มจั่วไพ่ของตนเองถ้าหากจนเองแต้มน้อยกว่า 17 แต่ถ้า <span class="red">Dealer</span> มีแต้มที่ 17-21
+                จะเริ่มจั่วไพ่ของตนเองถ้าหากตนเองแต้มน้อยกว่า 17 แต่ถ้า <span class="red">Dealer</span> มีแต้มที่ 17-21
                 <span class="red">Dealer</span>
                 จะไม่มีการจั่วไพ่เพิ่ม
               </li>
