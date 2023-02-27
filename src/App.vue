@@ -8,6 +8,7 @@ const close_BG = () => {
   bg_blur.value = false;
   onOff.value = true
 };
+// Status Show Hit is Avaliable or not
 let showHit = ref(true);
 
 // Variable JS
@@ -34,7 +35,7 @@ window.onload = function () {
 
 // build Deck
 function buildDeck() {
-  let points = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K",];
+  let points = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
   let types = ["A", "C", "N", "T"];
   for (const type of types) {
     for (const point of points) {
@@ -99,7 +100,17 @@ function drawCard(arr, yourPoint, countAce) {
   let srcCard = "img/All-card-final/" + codeCard + ".png"; // getPicture
   arr.push(srcCard);
   let point = codeCard.split("-")[0]; // "6-T" >> ["6", "T"] >> 6
-  point === "A" ? yourPoint.value + 11 > 21 ? point = 1 : (point = 11, countAce.value++) : isNaN(point) ? point = 10 : point;
+  // point === "A" ? yourPoint.value + 11 > 21 ? point = 1 : (point = 11, countAce.value++) : isNaN(point) ? point = 10 : point;
+  if (point === "A") {
+    if (yourPoint.value + 11 > 21) {
+      point = 1;
+    } else {
+      point = 11;
+      countAce.value++;
+    }
+  } else if (isNaN(point)) {
+    point = 10;
+  }
   if (countAce.value === 1 && yourPoint.value + parseInt(point) > 21) {
     countAce.value--;
     point -= 10;
