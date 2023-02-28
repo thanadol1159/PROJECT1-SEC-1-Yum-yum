@@ -8,7 +8,7 @@ const close_BG = () => {
   bg_blur.value = false;
   onOff.value = true
 };
-// Status Show Hit is Avaliable or not
+// Status Show Hit is Available or not
 let showHit = ref(true);
 
 // Variable JS
@@ -97,7 +97,7 @@ function stay() {
 // draw cards
 function drawCard(arr, yourPoint, countAce) {
   let codeCard = deck.shift(); // 6-T
-  let srcCard = "img/All-card-final/" + codeCard + ".png"; // getPicture
+  let srcCard = "/src/assets/All-card-final/" + codeCard + ".png"; // getPicture
   arr.push(srcCard);
   let point = codeCard.split("-")[0]; // "6-T" >> ["6", "T"] >> 6
   // point === "A" ? yourPoint.value + 11 > 21 ? point = 1 : (point = 11, countAce.value++) : isNaN(point) ? point = 10 : point;
@@ -200,9 +200,9 @@ const quit = () => {
 <template>
   <div class="w-screen h-screen">
     <!-- BG main -->
-    <div class="bg-bottom bg-cover bg-no-repeat w-full h-full bg-[url('img/background.png')]">
+    <div class="bg-bottom bg-cover bg-no-repeat w-full h-full bg-[url('/src/assets/background.png')]">
       <!-- BG start game -->
-      <label class="absolute w-screen h-screen bg-bottom bg-cover bg-no-repeat bg-[url('img/bg-blur.jpg')]"
+      <label class="absolute w-screen h-screen bg-bottom bg-cover bg-no-repeat bg-[url('/src/assets/bg-blur.jpg')]"
         @click="close_BG" v-show="bg_blur" for="my-modal-4">
         <h1
           class="w-full flex justify-center mt-9 font-sans font-extrabold text-9xl tracking-wider text-white max-md:text-6xl">
@@ -227,7 +227,7 @@ const quit = () => {
                 <a class="absolute left-5 text-5xl hover:text-slate-400" href="javascript:void(0)" @click="MenuOpen">×</a>
               </li>
               <li>
-                <img class="w-24 m-auto" src="../src/assets/img/back_card.png" />
+                <img class="w-24 m-auto" src="/src/assets/img/back_card.png" />
               </li>
               <li>
                 <a class="pt-8 text-center text-6xl text-slate-200 block hover:text-zinc-400 cursor-pointer  max-md:text-3xl"
@@ -337,7 +337,7 @@ const quit = () => {
       <!-- Dealer -->
       <div class="w-full pt-6">
         <div class="flex justify-center space-x-5" ref="imgCardDealer">
-          <img v-if="showHit" src="img/All-card-final/backcard/back_card.svg" class="w-32" />
+          <img v-if="showHit" src="./assets/img/back_card.png" class="w-32" />
           <img v-else :src="firstCard" class="w-32" />
           <img v-for="card in dealerArr" :src="card" class="w-32" />
           <!-- popup -->
